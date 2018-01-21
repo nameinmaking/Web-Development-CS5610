@@ -1,0 +1,62 @@
+body { font-family: Arial; }
+.button 
+{
+	color: white;
+	padding: 16px 32px;
+	text-align: center;
+	font-size: 16px;
+	margin: 4px 2px;
+}
+
+.button1 
+{
+	background-color: white; 
+	color: black; 
+	border: 2px solid Tomato;
+}
+
+.button1:hover 
+{
+	background-color: Tomato;
+	color: white;
+}
+
+.button2 
+{
+	background-color: white; 
+	color: black; 
+	border: 2px solid MediumSeaGreen;
+}
+
+.button2:hover 
+{
+	background-color: MediumSeaGreen;
+	color: white;
+}
+
+.button3 
+{
+	background-color: white; 
+	color: black; 
+	border: 2px solid DodgerBlue;
+}
+
+.button3:hover 
+{
+	background-color: DodgerBlue;
+	color: white;
+}
+div 
+{
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	text-align: center;
+}
+p 
+{
+	color: black;
+	bottom: 0%;
+	position: relative;	
+	width: 100%;
+}

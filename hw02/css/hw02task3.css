@@ -1,0 +1,63 @@
+body
+{
+	font-family: Arial;
+}
+
+h1
+{	
+	font-size: 40px;	
+	text-align: center;
+}
+
+#mainDiv	
+{	
+	display: flex;
+}
+
+#leftDiv
+{
+	width:30%;
+}
+
+#rightDiv	
+{	
+	width:70%;		
+	padding: 16px 32px;
+}
+
+
+/* The following will add a vertical navigation bar
+	In the question it wasn't clear so commenting for the final submission*/
+/*ul 
+{
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: Violet;
+    border: 2px solid #555;
+}
+
+li a 
+{
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+li 
+{
+    text-align: center;
+    border-bottom: 2px solid #555;
+}
+
+li:last-child 
+{
+    border-bottom: none;
+}
+
+li a:hover 
+{
+    background-color: #555;
+    color: white;
+}*/
