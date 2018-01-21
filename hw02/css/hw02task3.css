@@ -16,12 +16,13 @@ h1
 
 #leftDiv
 {
-	width:30%;
+	width:33%;
+    padding: 16px 32px;
 }
 
 #rightDiv	
 {	
-	width:70%;		
+	width:67%;		
 	padding: 16px 32px;
 }
 
