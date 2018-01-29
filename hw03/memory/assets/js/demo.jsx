@@ -129,14 +129,14 @@ class Layout extends React.Component
 
 
         //check if game needs to be reset
-        if (correctMatches === 8 && !ignoreCardClicks)
+        /*if (correctMatches === 8 && !ignoreCardClicks)
         {
             ignoreCardClicks = true;
             setTimeout(()=> {
                 this.restartGame();
                 ignoreCardClicks = false;
             },1000)
-        }
+        }*/
     }
 
     //reset everything on button click
