@@ -1,0 +1,117 @@
+/* This file is for your main application css. */
+
+@import "bootstrap";
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: gray;
+}
+
+table
+{
+  margin: 1px auto;
+  align:center;
+}
+
+td
+{
+  font-size: 30px;
+  /*width: 80px;*/
+  /*height: 80px;*/
+  /*background-image: url("Pokeball.PNG");*/
+  background: Tomato;
+  border-radius: 10px;
+}
+
+.card
+{
+  height: 100px;
+  width: 100px;
+  border: 4px solid black;
+  text-align: center;
+  border-radius: 10px;
+
+  p
+  {
+    font-size: 30px;
+    line-height: 100px;
+  }
+
+  &.done
+  {
+    background: white;
+    color: black;
+
+    &:hover
+    {
+      cursor: default;
+      border: 2px solid black;
+    }
+
+    p { display: none;  }
+
+    &:after
+    {
+      color: black;
+      // content: '✓';
+      content: #9989;
+      width: 100%;
+      font-size: 50px;
+      height: 100%;
+      line-height: 120px;
+    }
+  }
+
+  &:hover
+  {
+    cursor: pointer;
+    border: 2px solid black;
+  }
+}
+
+.card span {
+    font-size: 30px;
+    line-height: 100px;
+}
+
+h2
+{
+  position: absolute;
+  right: 40px;
+  top: 100px;
+}
+
+button
+{
+  background-color: DodgerBlue;
+  color: black;
+  border: 2px solid DodgerBlue;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 20px;
+  margin: 4px 2px;
+}
+
+button:hover
+{
+    background-color: white;
+    color: black;
+}
+
+#reset-button
+{
+    float: right;
+}
+
+#index-page
+{
+  text-align: center;
+}
+
+.load-game
+{
+  height: 40px;
+  width: 30%;
+  margin-top: 50px;
+}
