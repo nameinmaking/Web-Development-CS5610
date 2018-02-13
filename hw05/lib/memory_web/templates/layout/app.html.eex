@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="A Memory game based on ReactJS with Elixir at backend">
+    <meta name="author" content="Vipul Sharma">
 
-    <title>Hello Memory!</title>
+    <title>Memory Game | Elixir Style</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <script>
       window.userToken = "INSECURE";

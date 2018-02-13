@@ -4,7 +4,7 @@
     <p> Enter a new game save name or the one from where you want to continue</p>
     <p><input type="text" class="save-game" id="save-game"></p>
 
-    <button onclick="addName()">Join/Load Game</button
+    <button onclick="addName()">Join/Load Game</button>
   </div>
   <script>
   function addName() {
