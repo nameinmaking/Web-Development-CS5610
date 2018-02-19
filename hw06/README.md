@@ -1,7 +1,7 @@
 # Tasktracker #1| HW06
 ### An Application to keep track of thier tasks and assign them to others.
 
-####### Users of the app should be able to:
+###### Users of the app should be able to:
   * Register an account
   * Log in/Log put
   * Create Tasks, entering a title and description
