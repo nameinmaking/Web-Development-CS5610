@@ -1,0 +1,33 @@
+<h2>Show Task</h2>
+
+<ul class="list-group list-group-flush">
+
+  <li class="list-group-item">
+    <strong>Assigned To:</strong>
+    <%= @task.user.name %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Title:</strong>
+    <%= @task.title %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Description:</strong>
+    <%= @task.description %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Elapsed time:</strong>
+    <%= @task.elapsed_time %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Completed:</strong>
+    <%= @task.completed %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: task_path(@conn, :edit, @task), class: "btn btn-warning btn-xs"   %></span>
+<span><%= link "Back", to: task_path(@conn, :index), class: "btn btn-primary btn-xs"   %></span>
