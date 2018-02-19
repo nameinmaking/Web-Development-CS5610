@@ -11,6 +11,8 @@
 
 _To log in, it's sufficient for a user to enter their name (or email address)._
 
+___
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
