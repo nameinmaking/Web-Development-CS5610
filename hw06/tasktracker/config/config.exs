@@ -29,7 +29,7 @@ import_config "#{Mix.env}.exs"
 config :tasktracker, Tasktracker.Repo,
        adapter: Ecto.Adapters.Postgres,
        username: "tasktracker",
-       password: "pohVa4bo9Aed",
+       password: "vene1Uqu0ahx",
        database: "tasktracker_dev",
        hostname: "localhost",
        pool_size: 10
