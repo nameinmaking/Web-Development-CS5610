@@ -13,6 +13,15 @@ _To log in, it's sufficient for a user to enter their name (or email address)._
 
 ___
 
+# Design choices for the Assignment
+  * A drop-down menu is provided to select to whom the task should be assigned, as giving in user ID instead is tedious and not user friendly.
+  * The time tracking is manual right now, with an increment of 15 minutes at any instant.
+  * The task can marked, completed and incomplete as many times as required. It is assumed that the task can be required in future to be re-done due to any mistakes or issues in production system.
+
+###### Known Errors:
+> The application will fail if we create a task without logging in first. Am working on restriciting access to Task page, when the user is not logged in.
+___
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
