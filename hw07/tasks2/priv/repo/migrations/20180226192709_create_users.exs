@@ -1,4 +1,4 @@
-defmodule Tasktracker.Repo.Migrations.CreateUsers do
+defmodule Tasks2.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do
@@ -13,5 +13,6 @@ defmodule Tasktracker.Repo.Migrations.CreateUsers do
 
     # To constraint email to be unique
     create unique_index(:users,[:email], name: :email_index)
+
   end
 end

@@ -8,7 +8,6 @@ defmodule Tasktracker.UserTasks.Task do
     field :description, :string
     field :is_completed, :boolean, default: false
     field :title, :string
-    field :manager_id, :id
     belongs_to :user, Tasktracker.Accounts.User
 
     timestamps()
@@ -17,7 +16,7 @@ defmodule Tasktracker.UserTasks.Task do
   @doc false
   def changeset(%Task{} = task, attrs) do
     task
-    |> cast(attrs, [:title, :description, :is_completed])
-    |> validate_required([:title, :description, :is_completed])
+    |> cast(attrs, [:title, :description, :is_completed, :user_id])
+    |> validate_required([:title, :description, :is_completed, :user_id])
   end
 end

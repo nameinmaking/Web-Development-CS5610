@@ -1,28 +1,22 @@
-<h2>Show User</h2>
+<h2>User Details</h2>
 
-<ul>
+<div class="card card-inverse p-4" style="width: 25rem;">
+  <div class="card-block">
+    <h4 class="card-title"><b><%= @user.name %></b></h4>
+    <p class="card-text">
+      <b>Manager: </b><%= @user.manager_id %><br>
+      <%= if @user.is_manager do %>
+          <b>is manager?: </b> <h6 class="card-text text-success"> Yes </h6>
+       <% else %>
+          <b>is manager?: </b> <h6 class="card-text text-danger"> No </h6>
+       <% end %>
+    </p>
+    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+  </div>
+</div>
 
-  <li>
-    <strong>Email:</strong>
-    <%= @user.email %>
-  </li>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @user.name %>
-  </li>
-
-  <li>
-    <strong>Manager:</strong>
-    <%= @user.manager_id %>
-  </li>
-
-  <li>
-    <strong>Is manager:</strong>
-    <%= @user.is_manager %>
-  </li>
-
-</ul>
-
-<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
-<span><%= link "Back", to: user_path(@conn, :index) %></span>
+<p class="p-4">
+  <span><%= link "Back", to: user_path(@conn, :index), class: "btn btn-primary btn-xs" %></span>
+  <span><%= link "Edit", to: user_path(@conn, :edit, @user), class: "btn btn-warning btn-xs" %></span>
+</p>

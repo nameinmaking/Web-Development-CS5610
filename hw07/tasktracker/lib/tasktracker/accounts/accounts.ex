@@ -102,10 +102,7 @@ defmodule Tasktracker.Accounts do
     User.changeset(user, %{})
   end
 
-  # A funtion to get the user
-  def get_user(id) do
-    Repo.get(User, id)
-  end
+  def get_user(id), do: Repo.get(User, id)
 
   # A function for email lookup
   def get_user_by_email(email) do
