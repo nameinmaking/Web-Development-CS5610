@@ -6,7 +6,7 @@
       <th>Email</th>
       <th>Name</th>
       <th>Manager</th>
-      <th>Is manager</th>
+      <th>is manager?</th>
 
       <th></th>
     </tr>
@@ -17,11 +17,17 @@
       <td><%= user.email %></td>
       <td><%= user.name %></td>
       <td><%= user.manager_id %></td>
-      <td><%= user.is_manager %></td>
+      <td>
+      <%= if user.is_manager do %>
+          <h6 class="card-text text-success"> Yes </h6>
+       <% else %>
+          <h6 class="card-text text-danger"> No </h6>
+       <% end %>
+      </td>
 
       <td class="text-right">
-        <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-success btn-xs" %></span>
+        <span><%= link "Edit", to: user_path(@conn, :edit, user), class: "btn btn-warning btn-xs" %></span>
         <span><%= link "Delete", to: user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
@@ -29,4 +35,5 @@
   </tbody>
 </table>
 
-<span><%= link "New User", to: user_path(@conn, :new) %></span>
+<span><%= link "New User", to: user_path(@conn, :new), class: "btn btn-dark btn-xs" %></span>
+<span><%= link "Task Home", to: task_path(@conn, :index), class: "btn btn-light btn-xs" %></span>

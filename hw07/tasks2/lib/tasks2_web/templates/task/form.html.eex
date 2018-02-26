@@ -6,6 +6,18 @@
   <% end %>
 
   <div class="form-group">
+    <br>
+    <label><b>Assigned by: </b></label>
+    <%= @current_user.name %>
+  </div>
+
+  <div class="form-group">
+    <label>Assign to [user]:</label>
+    <%= select f, :user_id, get_names(), class: "form-control", selected: @current_user.id %>
+    <%= error_tag f, :user_id %>
+  </div>
+
+  <div class="form-group">
     <%= label f, :title, class: "control-label" %>
     <%= text_input f, :title, class: "form-control" %>
     <%= error_tag f, :title %>
