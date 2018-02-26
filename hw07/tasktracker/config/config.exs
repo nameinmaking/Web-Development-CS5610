@@ -12,7 +12,7 @@ config :tasktracker,
 # Configures the endpoint
 config :tasktracker, TasktrackerWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "bfo/rnbEzbxDDfQiqKAxbDrO5XTMqSL8BfkcKxZbgAlIEvrLja50vhYEHkCJ5MXs",
+  secret_key_base: "Ouct7Zu113Y5V0o1b1Ky/JFvm/c3e5QSLiLqDg+SMBxI24/knT1a3cTYRTtRMfCC",
   render_errors: [view: TasktrackerWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Tasktracker.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -25,11 +25,3 @@ config :logger, :console,
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
-
-config :tasktracker, Tasktracker.Repo,
-       adapter: Ecto.Adapters.Postgres,
-       username: "tasktracker",
-       password: "vene1Uqu0ahx",
-       database: "tasktracker_dev",
-       hostname: "localhost",
-       pool_size: 10

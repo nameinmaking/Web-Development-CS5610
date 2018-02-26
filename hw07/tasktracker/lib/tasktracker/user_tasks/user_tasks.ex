@@ -38,7 +38,7 @@ defmodule Tasktracker.UserTasks do
   """
   def get_task!(id) do
     Repo.get!(Task, id)
-    |> Repo.preload(:user)
+    |> Repo.preload(:user)    # pre-loading all the users to display
   end
 
   @doc """

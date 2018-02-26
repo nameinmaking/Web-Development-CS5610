@@ -6,9 +6,9 @@ defmodule Tasktracker.UserTasksTest do
   describe "tasks" do
     alias Tasktracker.UserTasks.Task
 
-    @valid_attrs %{completed: true, description: "some description", elapsed_time: 42, title: "some title"}
-    @update_attrs %{completed: false, description: "some updated description", elapsed_time: 43, title: "some updated title"}
-    @invalid_attrs %{completed: nil, description: nil, elapsed_time: nil, title: nil}
+    @valid_attrs %{description: "some description", is_completed: true, title: "some title"}
+    @update_attrs %{description: "some updated description", is_completed: false, title: "some updated title"}
+    @invalid_attrs %{description: nil, is_completed: nil, title: nil}
 
     def task_fixture(attrs \\ %{}) do
       {:ok, task} =
@@ -31,9 +31,8 @@ defmodule Tasktracker.UserTasksTest do
 
     test "create_task/1 with valid data creates a task" do
       assert {:ok, %Task{} = task} = UserTasks.create_task(@valid_attrs)
-      assert task.completed == true
       assert task.description == "some description"
-      assert task.elapsed_time == 42
+      assert task.is_completed == true
       assert task.title == "some title"
     end
 
@@ -45,9 +44,8 @@ defmodule Tasktracker.UserTasksTest do
       task = task_fixture()
       assert {:ok, task} = UserTasks.update_task(task, @update_attrs)
       assert %Task{} = task
-      assert task.completed == false
       assert task.description == "some updated description"
-      assert task.elapsed_time == 43
+      assert task.is_completed == false
       assert task.title == "some updated title"
     end
 

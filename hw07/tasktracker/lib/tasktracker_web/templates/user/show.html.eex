@@ -1,23 +1,28 @@
 <h2>Show User</h2>
 
-<ul class="list-group list-group-flush">
+<ul>
 
-  <li class="list-group-item">
-    <strong>User ID:</strong>
-    <%= @user.id %>
-  </li>
-
-  <li class="list-group-item">
+  <li>
     <strong>Email:</strong>
     <%= @user.email %>
   </li>
 
-  <li class="list-group-item">
+  <li>
     <strong>Name:</strong>
     <%= @user.name %>
   </li>
 
+  <li>
+    <strong>Manager:</strong>
+    <%= @user.manager_id %>
+  </li>
+
+  <li>
+    <strong>Is manager:</strong>
+    <%= @user.is_manager %>
+  </li>
+
 </ul>
 
-<span><%= link "Edit", to: user_path(@conn, :edit, @user), class: "btn btn-warning btn-xs" %></span>
-<span><%= link "Back", to: user_path(@conn, :index), class: "btn btn-primary btn-xs" %></span>
+<span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
+<span><%= link "Back", to: user_path(@conn, :index) %></span>

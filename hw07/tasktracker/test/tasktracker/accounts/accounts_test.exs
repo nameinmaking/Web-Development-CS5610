@@ -6,9 +6,9 @@ defmodule Tasktracker.AccountsTest do
   describe "users" do
     alias Tasktracker.Accounts.User
 
-    @valid_attrs %{email: "some email", name: "some name"}
-    @update_attrs %{email: "some updated email", name: "some updated name"}
-    @invalid_attrs %{email: nil, name: nil}
+    @valid_attrs %{email: "some email", is_manager: true, manager_id: 42, name: "some name"}
+    @update_attrs %{email: "some updated email", is_manager: false, manager_id: 43, name: "some updated name"}
+    @invalid_attrs %{email: nil, is_manager: nil, manager_id: nil, name: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -32,6 +32,8 @@ defmodule Tasktracker.AccountsTest do
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some email"
+      assert user.is_manager == true
+      assert user.manager_id == 42
       assert user.name == "some name"
     end
 
@@ -44,6 +46,8 @@ defmodule Tasktracker.AccountsTest do
       assert {:ok, user} = Accounts.update_user(user, @update_attrs)
       assert %User{} = user
       assert user.email == "some updated email"
+      assert user.is_manager == false
+      assert user.manager_id == 43
       assert user.name == "some updated name"
     end
 

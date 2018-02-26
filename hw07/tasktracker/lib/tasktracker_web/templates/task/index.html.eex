@@ -3,10 +3,9 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Assigned To</th>
       <th>Title</th>
       <th>Description</th>
-      <th>Completed</th>
+      <th>Is completed</th>
 
       <th></th>
     </tr>
@@ -14,14 +13,13 @@
   <tbody>
 <%= for task <- @tasks do %>
     <tr>
-      <td><%= task.user.name %></td>
       <td><%= task.title %></td>
       <td><%= task.description %></td>
-      <td><%= task.completed %></td>
+      <td><%= task.is_completed %></td>
 
       <td class="text-right">
-        <span><%= link "Show", to: task_path(@conn, :show, task), class: "btn btn-success btn-xs" %></span>
-        <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-warning btn-xs" %></span>
+        <span><%= link "Show", to: task_path(@conn, :show, task), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>
@@ -29,4 +27,4 @@
   </tbody>
 </table>
 
-<span><%= link "New Task", to: task_path(@conn, :new), class: "btn btn-dark btn-xs"  %></span>
+<span><%= link "New Task", to: task_path(@conn, :new) %></span>

@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :tasktracker, Tasktracker.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "tasktracker",
-  password: "vene1Uqu0ahx",
+  username: "postgres",
+  password: "postgres",
   database: "tasktracker_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

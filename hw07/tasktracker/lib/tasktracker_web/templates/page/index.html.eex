@@ -1,51 +1,36 @@
-<h1>Task Tracker #1 </h1>
+<div class="jumbotron">
+  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
+  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+</div>
 
-
-<div class="modal-body row">
-  <div class="col-md-6">
-      <p>Users of this app are able to:</p>
-      <ul>
-        <li>Register an account</li>
-        <li>Log in / Log out</li>
-        <li>Create Tasks, entering a title and a description</li>
-        <li>Assign tasks to themselves or other users</li>
-        <li>Track how long they've worked on a task they're assigned to, in 15-minute increments.</li>
-        <li>Mark a task as completed.</li>
-        <li>Milk</li>
-      </ul>
+<div class="row marketing">
+  <div class="col-lg-6">
+    <h4>Resources</h4>
+    <ul>
+      <li>
+        <a href="http://phoenixframework.org/docs/overview">Guides</a>
+      </li>
+      <li>
+        <a href="https://hexdocs.pm/phoenix">Docs</a>
+      </li>
+      <li>
+        <a href="https://github.com/phoenixframework/phoenix">Source</a>
+      </li>
+    </ul>
   </div>
 
-
-
-
-<div class="col-md-6">
-  <!-- Attribution:
-       The image displayed has been taken from the link https://online-project-management.bestreviews.net/files/control-chaos-at-work.png-->
-  <img src="/images/tasks1.png" alt="https://online-project-management.bestreviews.net/files/control-chaos-at-work.png"/>
+  <div class="col-lg-6">
+    <h4>Help</h4>
+    <ul>
+      <li>
+        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
+      </li>
+      <li>
+        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
+      </li>
+      <li>
+        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
+      </li>
+    </ul>
+  </div>
 </div>
-</div>
-
-
-<%= form_tag("/session", method: :post) do %>
-
-      <div class="card text-black bg-light mb-3 text-center" style="width: 25rem;">
-        <h3 class="card-header">Log In</h3>
-        <div class="card-body">
-
-          <div class="form-group row">
-            <label for="example-text-input" class="col-3 col-form-label">Email ID:</label>
-            <div class="col-9">
-              <input class="form-control" type="text" name="email" placeholder="alice@example.com" id="example-text-input">
-            </div>
-          </div>
-
-          <br>
-          <div class="form-group">
-            <button class="btn btn-primary">Log in</button>
-            <a href="/users/new" class="btn btn-primary">Register</a>
-          </div>
-        </div>
-      </div>
-
-
-<% end %>

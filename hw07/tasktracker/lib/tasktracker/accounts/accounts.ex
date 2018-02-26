@@ -19,7 +19,6 @@ defmodule Tasktracker.Accounts do
   """
   def list_users do
     Repo.all(User)
-    |> Repo.preload(:manager)
   end
 
   @doc """
@@ -103,9 +102,9 @@ defmodule Tasktracker.Accounts do
     User.changeset(user, %{})
   end
 
+  # A funtion to get the user
   def get_user(id) do
     Repo.get(User, id)
-    |> Repo.preload(:manager)
   end
 
   # A function for email lookup
