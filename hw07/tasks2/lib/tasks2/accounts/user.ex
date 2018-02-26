@@ -7,7 +7,6 @@ defmodule Tasks2.Accounts.User do
   schema "users" do
     field :email, :string
     field :is_manager, :boolean, default: false
-    field :manager_id, :integer
     field :name, :string
 
     timestamps()
@@ -16,8 +15,8 @@ defmodule Tasks2.Accounts.User do
   @doc false
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :name])
-    |> validate_required([:email, :name])
+    |> cast(attrs, [:email, :name, :is_manager])
+    |> validate_required([:email, :name, :is_manager])
     |> unique_constraint(:email, name: :email_index)    # to check if email is unique
     |> validate_format(:email, ~r/@./)
   end

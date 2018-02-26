@@ -17,16 +17,26 @@
       <!-- Adding a header to display the logged in user -->
 
       <div class="row">
-        <%= if @current_user do %>
-          <div class="col-9">
-            <p class="p-4">
-              <a href="/feed">Feed</a> |
-              <a href="/users">All Users</a> |
-              <a href="/tasks">Task Home</a> |
-              <a href="/">Login Page</a>
-            </p>
-          </div>
 
+        <%= if @current_user do %>
+          <%= if @current_user.is_manager == true || @current_user.is_manager == nil do %>
+            <div class="col-9">
+              <p class="p-4">
+                <a href="/feed">Feed</a> |
+                <a href="/users">All Users</a> |
+                <a href="/tasks">Task Home</a> |
+                <a href="/">Login Page</a>
+              </p>
+            </div>
+          <% else %>
+            <div class="col-9">
+              <p class="p-4">
+                <a href="/feed">Feed</a> |
+                <a href="/users">All Users</a> |
+                <a href="/">Login Page</a>
+              </p>
+            </div>
+          <% end %>
           <div class="col-3">
             <p class="p-4">
               Logged in as: <%= @current_user.name %> |
@@ -34,6 +44,13 @@
             </p>
           </div>
         <% else %>
+          <div class="col-9">
+            <p class="p-4">
+              <a href="/feed">Feed</a> |
+              <a href="/users">All Users</a> |
+              <a href="/">Login Page</a>
+            </p>
+          </div>
           <div class="col-3 offset-9">
             <p>Not logged in.</p>
           </div>

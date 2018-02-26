@@ -108,4 +108,5 @@ defmodule Tasks2.Accounts do
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
   end
+  
 end

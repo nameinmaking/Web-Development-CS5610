@@ -27,7 +27,7 @@
 
   <div class="form-group">
     <%= label f, :is_manager, class: "control-label" %>
-    <%= checkbox f, :is_manager, class: "checkbox" %>
+    <%= checkbox f, :is_manager, class: "checkbox"%>
     <%= error_tag f, :is_manager %>
   </div>
 

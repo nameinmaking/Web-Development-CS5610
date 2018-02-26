@@ -36,7 +36,7 @@ defmodule Tasks2Web.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_tasks2_key",
-    signing_salt: "0bqArjNA"
+    signing_salt: "rAYWzaSe"
 
   plug Tasks2Web.Router
 
