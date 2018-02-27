@@ -3,10 +3,12 @@ defmodule TasktrackerWeb.TaskController do
 
   alias Tasktracker.UserTasks
   alias Tasktracker.UserTasks.Task
+  alias Tasktracker.UserTasks.Sprintcycle
 
   def index(conn, _params) do
     tasks = UserTasks.list_tasks()
-    render(conn, "index.html", tasks: tasks)
+    sprintcycle = UserTasks.time_maps_for()
+    render(conn, "index.html", tasks: tasks, sprintcycle: sprintcycle)
   end
 
   def new(conn, _params) do
@@ -27,7 +29,10 @@ defmodule TasktrackerWeb.TaskController do
 
   def show(conn, %{"id" => id}) do
     task = UserTasks.get_task!(id)
-    render(conn, "show.html", task: task)
+    sprintcycle = UserTasks.get_sprintcycle_by_task_id(id)
+    conn=assign(conn, :task_id, id)
+    changeset = UserTasks.change_sprintcycle(%Sprintcycle{})
+    render(conn, "show.html", task: task, sprintcycle: sprintcycle)
   end
 
   def edit(conn, %{"id" => id}) do

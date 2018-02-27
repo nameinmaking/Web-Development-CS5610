@@ -1,34 +1,73 @@
-<h2>Show Task</h2>
+<b><h2>Task Details</h2></b>
+<br>
 
-<ul class="list-group list-group-flush">
-
-  <li class="list-group-item">
-    <strong>Assigned To:</strong>
-    <%= @task.user.name %>
-  </li>
-
-  <li class="list-group-item">
-    <strong>Title:</strong>
-    <%= @task.title %>
-  </li>
-
-  <li class="list-group-item">
-    <strong>Description:</strong>
-    <%= @task.description %>
-  </li>
-
-  <li class="list-group-item">
-    <strong>Task Status:</strong>
-    <%= if @task.is_completed do %>
-        <h6 class="card-text text-success"> Completed </h6>
+<div class="card text-black p-4" style="width: 25rem;">
+ <div class="card-block">
+   <h4 class="card-title">
+     Created By:
+     <%= if @task.user do
+       @task.user.name
+     else
+       "Deleted User"
+     end %>
+ </h4>
+ </div>
+ <ul class="list-group list-group-flush">
+   <li class="list-group-item"><b>Title: </b><%= @task.title %></li>
+   <li class="list-group-item"><b>Description: </b><%= @task.description %></li>
+   <li class="list-group-item"><b>Assigned to: </b>
+     <%= if @task.assigned_to do %>
+       <%  assigned_user = Tasktracker.Accounts.get_user(@task.assigned_to) %>
+       <%= " ("<>assigned_user.name<>") " <> assigned_user.email%>
      <% else %>
-        <h6 class="card-text text-danger"> In progress </h6>
+       <span class="text-danger">Not Assigned</span>
      <% end %>
-  </li>
+   </li>
+   <li class="list-group-item">
+     <b>Task Status:</b>
+     <%= if @task.complete do %>
+         <h6 class="card-text text-success"> Complete </h6>
+      <% else %>
+         <h6 class="card-text text-warning"> In progress </h6>
+      <% end %>
+   </li>
+ </ul>
+</div>
 
-</ul>
+<br><br>
+<h4>User's Work Sprint(s)</h4>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Start Time</th>
+      <th>EndTime</th>
+      <th>Add/Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for timeblock <- @sprintcycle do %>
+    <tr>
+      <td><%= String.slice(NaiveDateTime.to_string(timeblock.start_time),0..-8) %></td>
+      <td><%= String.slice(NaiveDateTime.to_string(timeblock.end_time),0..-8) %></td>
+      <td>
+        <%= link "Edit", to: sprintcycle_path(@conn, :edit, timeblock.id), method: :get, class: "btn btn-warning btn-xs" %>
+        <%= link "Delete", to: sprintcycle_path(@conn, :delete, timeblock.id), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<p class="p-4">
-  <span><%= link "Back", to: task_path(@conn, :index), class: "btn btn-primary btn-xs"   %></span>
-  <span ><%= link "Edit", to: task_path(@conn, :edit, @task), class: "btn btn-warning btn-xs"   %></span>
-</p>
+<%= link "Back", to: task_path(@conn, :index), class: "btn btn-primary btn-xs"  %>
+
+<%= if @current_user do %>
+  <%= form_for @conn, (session_path(@conn, :task_create)), fn f -> %>
+    <div class="form-group">
+        <%= hidden_input f, :task_id, class: "form-control", value: @task.id %>
+    </div>
+    <div class="form-group">
+      <%= button "Edit Task", to: task_path(@conn, :edit, @task), method: "get", class: "btn btn-warning" %>
+      <button class="btn btn-success">New TimeBlock</button>
+    </div>
+  <% end %>
+<% end %>

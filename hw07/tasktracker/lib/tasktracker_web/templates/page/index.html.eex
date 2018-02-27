@@ -1,4 +1,4 @@
-<h1>Task Tracker #1 </h1>
+<h1>Task Tracker #2 </h1>
 
 
 <div class="modal-body row">
@@ -11,7 +11,17 @@
         <li>Assign tasks to themselves or other users</li>
         <li>Track how long they've worked on a task they're assigned to, in 15-minute increments.</li>
         <li>Mark a task as completed.</li>
-        <li>Milk</li>
+      </ul>
+
+      <br>
+      <h2><i>New Features</i></h2>
+      <ul>
+        <li>Managers can now be selected</li>
+        <li>Only a manger can assign a task to it's underling</li>
+        <li>User profile page shows the Manager and Underling details</li>
+        <li>Users can now record their work sprint, by clicking on start/stop</li>
+        <li>Users can also record their work as Sprint Blocks manually too</li>
+        <li>A better feed</li>
       </ul>
   </div>
 

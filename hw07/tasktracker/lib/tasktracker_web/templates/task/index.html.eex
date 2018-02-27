@@ -1,38 +1,66 @@
-<h2>Listing Tasks</h2>
+<script>
+ window.sprintcycle_path = "<%= sprintcycle_path(@conn, :index) %>";
+</script>
 
-<table class="table">
-  <thead>
+<h2>List of all the Tasks</h2>
+
+<table class="table table-striped">
+  <thead class="text-center">
     <tr>
-      <th>Assigned To</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Task Status</th>
-
-      <th></th>
+      <th class="width1">Track</th>
+      <th class="width2">Title</th>
+      <th class="width3">Description</th>
+      <th class="width1">Assigned To</th>
+      <th class="width2">Completed</th>
+      <th class="width3"></th>
     </tr>
   </thead>
-  <tbody>
-<%= for task <- @tasks do %>
+  <tbody class="text-center">
+    <%= for task <- @tasks do %>
     <tr>
-      <td><%= task.user.name %></td>
+      <td>
+        <%= if @current_user do %>
+          <button class="startbutton btn btn-dark"
+                data-task-id="<%= task.id %>"
+                data-id="<%= @sprintcycle[task.id] %>">
+            Start
+          </button>
+        <% else %>
+          <button disabled> Start </button>
+        <% end %>
+      </td>
       <td><%= task.title %></td>
       <td><%= task.description %></td>
-      <td>
-      <%= if task.is_completed do %>
-          <h6 class="card-text text-success"> Completed </h6>
-       <% else %>
-          <h6 class="card-text text-danger"> In progress </h6>
-       <% end %>
-     </td>
+      <%= if task.assigned_to do %>
+        <%  assigned_user =  Tasktracker.Accounts.get_user(task.assigned_to) %>
+        <td><%= assigned_user.email %></td>
+      <% else %>
+        <td>Not Assigned</td>
+      <% end %>
 
-      <td class="text-right">
+      <td>
+      <%= if task.complete do %>
+        <div class="text-success">Completed</div>
+      <% else %>
+        <div class="text-danger">Not Completed</div>
+      <% end %>
+      </td>
+      <%= if @current_user do %>
+      <td>
         <span><%= link "Show", to: task_path(@conn, :show, task), class: "btn btn-success btn-xs" %></span>
         <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-warning btn-xs" %></span>
         <span><%= link "Delete", to: task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
+      <% end %>
     </tr>
-<% end %>
+    <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Task", to: task_path(@conn, :new), class: "btn btn-dark btn-xs"  %></span>
+<%= if @current_user do %>
+  <span><%= button "New Task", to: task_path(@conn, :new), method: "get", class: "btn btn-success" %></span>
+  <span><%= button "View User Details", to: user_path(@conn, :show, @current_user), method: "get", class: "btn btn-secondary" %></span>
+<% else %>
+  <span><%= button "Login", to: page_path(@conn, :index), method: "get", class: "btn btn-primary" %></span>
+<% end %>
+<br><br>

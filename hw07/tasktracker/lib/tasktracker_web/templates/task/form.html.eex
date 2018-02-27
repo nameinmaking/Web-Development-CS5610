@@ -1,47 +1,39 @@
 <%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+<%= if @changeset.action do %>
+<div class="alert alert-danger">
+  <p>Oops, something went wrong! Please check the errors below.</p>
+</div>
+<% end %>
 
-  <div class="form-group">
-    <br>
-    <label><b>Assigned by: </b></label>
-    <%= @current_user.name %>
-  </div>
+<div class="form-group">
+  <%= hidden_input f, :user_id, class: "form-control", value: @current_user.id %>
+</div>
 
-  <div class="form-group">
-    <label>Assign to [user]:</label>
-    <%= select f, :user_id, get_names(), class: "form-control", selected: @current_user.id %>
-    <%= error_tag f, :user_id %>
-  </div>
+<div class="form-group">
+  <%= label f, :title, class: "control-label" %>
+  <%= text_input f, :title, class: "form-control" %>
+  <span class="error"><%= error_tag f, :title %><span>
+</div>
 
-  <div class="form-group">
-    <%= label f, :title, class: "control-label" %>
-    <%= text_input f, :title, class: "form-control" %>
-    <%= error_tag f, :title %>
-  </div>
+<div class="form-group">
+  <%= label f, :description, class: "control-label" %>
+  <%= textarea f, :description, class: "form-control" %>
+  <span class="error"><%= error_tag f, :description %><span>
+</div>
 
-  <div class="form-group">
-    <%= label f, :description, class: "control-label" %>
-    <%= textarea f, :description, class: "form-control" %>
-    <%= error_tag f, :description %>
-  </div>
+<div class="form-group">
+  <%= label f, :assigned_to, class: "control-label" %>
+  <%= select f, :assigned_to, Enum.map(Tasktracker.Accounts.get_user_by_manager_id(@current_user.id), &{&1.email, &1.id}),prompt: "Select", class: "form-control"%>
+  <%= error_tag f, :assigned_to %>
+</div>
 
-  <div class="form-group">
-    <%= label f, "Elapsed Time [15-minute increments]", class: "control-label" %>
-    <%= number_input f, :elapsed_time, class: "form-control", step: 15 %>
-    <%= error_tag f, :elapsed_time %>
-  </div>
+<div class="form-group">
+  <%= label f, "Completed", class: "control-label" %>
+  <%= checkbox f, :complete, class: "checkbox" %>
+  <%= error_tag f, :complete %>
+</div>
 
-  <div class="form-group">
-    <%= label f, :is_completed, class: "control-label" %>
-    <%= checkbox f, :is_completed, class: "checkbox" %>
-    <%= error_tag f, :is_completed %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
+<div class="form-group">
+  <%= submit "Submit", class: "btn btn-primary" %>
+</div>
 <% end %>

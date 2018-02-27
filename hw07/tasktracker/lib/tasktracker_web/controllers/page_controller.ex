@@ -10,4 +10,5 @@ defmodule TasktrackerWeb.PageController do
     changeset = Tasktracker.UserTasks.change_task(%Tasktracker.UserTasks.Task{})
     render conn, "feed.html", tasks: tasks, changeset: changeset
   end
+
 end

@@ -2,19 +2,17 @@ defmodule TasktrackerWeb.SessionController do
   use TasktrackerWeb, :controller
 
   alias Tasktracker.Accounts
-  alias Tasktracker.Accounts.User
 
-  def create(conn, %{"email" => email}) do
+  def create(conn, %{"email" => email }) do
     user = Accounts.get_user_by_email(email)
-
-    if conn do
+    if user do
       conn
       |> put_session(:user_id, user.id)
       |> put_flash(:info, "Welcome back #{user.name}")
-      |> redirect(to: task_path(conn, :index))
+      |>redirect(to: user_path(conn, :show, user))
     else
       conn
-      |> put_flash(:error, "Cannot create session")
+      |> put_flash(:error, "Can't create session")
       |> redirect(to: page_path(conn, :index))
     end
   end
@@ -22,7 +20,14 @@ defmodule TasktrackerWeb.SessionController do
   def delete(conn, _params) do
     conn
     |> delete_session(:user_id)
-    |> put_flash(:info, "Logged Out")
+    |> put_flash(:info, "Logged out")
     |> redirect(to: page_path(conn, :index))
   end
+
+  def task_create(conn,%{ "task_id" => task_id }) do
+    conn
+    |> put_session(:task_id, task_id)
+    |> redirect(to: sprintcycle_path(conn, :new))
+  end
+
 end

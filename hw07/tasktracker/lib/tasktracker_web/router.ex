@@ -8,17 +8,41 @@ defmodule TasktrackerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :get_current_user
+    plug :get_current_task
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :get_current_user
+    plug :get_current_task
   end
 
+  # Other scopes may use custom stacks.
+  scope "/api/v1", TasktrackerWeb do
+    pipe_through :api
+    resources "/sprintcycle", SprintcycleController
+  end
+
+  # Getting user and the Task(s)
   def get_current_user(conn, _params) do
     user_id = get_session(conn, :user_id)
+    task_id = get_session(conn, :task_id)
     user = Tasktracker.Accounts.get_user(user_id || -1)
-    assign(conn, :current_user, user)
+    conn
+    |> assign(:current_user, user)
+    |> assign(:current_task, task_id)
   end
+
+
+  # The current Task
+  def get_current_task(conn, _params) do
+    task_id = get_session(conn, :task_id)
+    conn
+    |> assign(:current_task, task_id)
+  end
+
 
   scope "/", TasktrackerWeb do
     pipe_through :browser # Use the default browser stack
@@ -29,10 +53,15 @@ defmodule TasktrackerWeb.Router do
     post "/session", SessionController, :create     # creation
     delete "/session", SessionController, :delete   # deletion
     get "/feed", PageController, :feed  # feed route
+
+    post "/session_task", SessionController, :task_create #task creation
+
+    # Sprintcycle routes
+    get "/sprintcycle/new", SprintcycleController, :new
+    post "/sprintcycle/create", SprintcycleController, :web_create
+    get "/sprintcycle/:id/edit", SprintcycleController, :edit
+    put "/sprintcycle/:id", SprintcycleController, :web_update
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", TasktrackerWeb do
-  #   pipe_through :api
-  # end
+
 end

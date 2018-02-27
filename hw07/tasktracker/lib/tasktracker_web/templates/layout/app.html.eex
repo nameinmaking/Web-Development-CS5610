@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <title>Hello Tasktracker!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.scss") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
   <body>
@@ -17,16 +17,16 @@
       <!-- Adding a header to display the logged in user -->
 
       <div class="row">
+
         <%= if @current_user do %>
           <div class="col-9">
             <p class="p-4">
               <a href="/feed">Feed</a> |
-              <a href="/users">All Users</a> |
               <a href="/tasks">Task Home</a> |
+              <a href="/users">All Users</a> |
               <a href="/">Login Page</a>
             </p>
           </div>
-
           <div class="col-3">
             <p class="p-4">
               Logged in as: <%= @current_user.name %> |
@@ -38,7 +38,7 @@
             <p>Not logged in.</p>
           </div>
         <% end %>
-      </div>
+    </div>
 
       <%= if get_flash(@conn, :info) do %>
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

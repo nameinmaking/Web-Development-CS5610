@@ -3,9 +3,9 @@ defmodule TasktrackerWeb.UserControllerTest do
 
   alias Tasktracker.Accounts
 
-  @create_attrs %{email: "some email", is_manager: true, manager_id: 42, name: "some name"}
-  @update_attrs %{email: "some updated email", is_manager: false, manager_id: 43, name: "some updated name"}
-  @invalid_attrs %{email: nil, is_manager: nil, manager_id: nil, name: nil}
+  @create_attrs %{email: "some email", name: "some name"}
+  @update_attrs %{email: "some updated email", name: "some updated name"}
+  @invalid_attrs %{email: nil, name: nil}
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)

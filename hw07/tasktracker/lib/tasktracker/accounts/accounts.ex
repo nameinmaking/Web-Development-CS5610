@@ -102,10 +102,30 @@ defmodule Tasktracker.Accounts do
     User.changeset(user, %{})
   end
 
+
+  # We want a non-bang variant
   def get_user(id), do: Repo.get(User, id)
 
-  # A function for email lookup
+  # And we want by-email lookup
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
   end
+
+  # get all users who have given manager
+  def get_user_by_manager_id(id) do
+    Repo.all(
+      from p in User,
+        where: p.manager_id == ^id,
+        select: %{ name: p.name, email: p.email, id: p.id }
+        )
+  end
+
+  def get_id_by_manager_id(id) do
+    Repo.all(
+      from p in User,
+      where: p.manager_id == ^id,
+      select: p.id
+    )
+  end
+
 end
