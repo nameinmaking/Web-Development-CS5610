@@ -1,0 +1,29 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :email, class: "control-label" %>
+    <%= text_input f, :email, class: "form-control", type: "email", placeholder: "user@example.com" %>
+    <span class="error"> <%= error_tag f, :email %> </span>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :name, class: "control-label" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <span class="error"> <%= error_tag f, :name %> </span>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :manager, class: "control-label" %>
+    <%= select f, :manager_id, Enum.map(Tasktracker.Accounts.list_users, &{&1.email, &1.id}), prompt: "Select", class: "form-control"%>
+    <span class="error"> <%= error_tag f, :name %> </span>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

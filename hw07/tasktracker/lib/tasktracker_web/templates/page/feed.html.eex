@@ -1,0 +1,32 @@
+
+ <h1> Task Dashboard</h1>
+
+ <%= Enum.map @tasks, fn task -> %>
+ <br>
+ <div class="card text-black p-4" style="width: 25rem;">
+  <div class="card-block">
+    <h4 class="card-title">
+      <%= if task.assigned_to do %>
+        <%  assigned_user =  Tasktracker.Accounts.get_user(task.assigned_to) %>
+        <td><b><%= assigned_user.name %>'s Task </b></td>
+      <% else %>
+        <td>Not Assigned</td>
+      <% end %>
+  </h4>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Assigned By: </b><%= task.user.name %></li>
+    <li class="list-group-item"><b>Description: </b><%= task.description %></li>
+    <li class="list-group-item">
+      <b>Task Status:</b>
+      <%= if task.complete do %>
+          <h6 class="card-text text-success"> Complete </h6>
+       <% else %>
+          <h6 class="card-text text-warning"> In progress </h6>
+       <% end %>
+    </li>
+  </ul>
+</div>
+<% end %>
+<br>
+<span><%= link "Task Home", to: task_path(@conn, :index), class: "btn btn-dark btn-xs" %></span>
