@@ -1,7 +1,0 @@
-<h2>New Timeblock</h2>
-
-<h6><b> Task Title :</b> <%= Tasktracker.UserTasks.get_task(@current_task).title %></h6>
-
-<%= render "form.html", Map.put(assigns, :action, sprintcycle_path(@conn, :web_create)) %>
-
-<span><%= link "Back", to: task_path(@conn, :show, Tasktracker.UserTasks.get_task(@current_task)), class: "btn btn-primary btn-xs"  %></span>
