@@ -1,0 +1,7 @@
+<h2>Edit Sprintcycle</h2>
+
+<h6><b> Task Title :</b> <%= Tasktracker2.UserTasks.get_task(@current_task).title %></h6>
+
+<%= render "form.html", Map.put(assigns, :action, sprintcycle_path(@conn, :web_update, @sprintcycle)) %>
+
+<span><%= link "Back", to: task_path(@conn, :show, Tasktracker2.UserTasks.get_task(@current_task)), class: "btn btn-primary btn-xs"  %></span>
