@@ -11,13 +11,15 @@
 
   <div class="form-group">
     <%= label f, :start_time, class: "control-label" %>
-    <%= text_input f, :start_time, type: "datetime", class: "form-control", type: "datetime", placeholder: "YYYY-MM-DD HH:mm:ss" %>
+    <!-- <%= text_input f, :start_time, type: "datetime", class: "form-control", type: "datetime", placeholder: "YYYY-MM-DD HH:mm:ss" %> -->
+    <%= datetime_select f, :start_time, class: "form-control" %>
     <span class="error"><%= error_tag f, :start_time %><span>
   </div>
 
   <div class="form-group">
     <%= label f, :end_time, class: "control-label" %>
-    <%= text_input f, :end_time, type: "datetime", class: "form-control", placeholder: "YYYY-MM-DD HH:mm:ss" %>
+    <!-- <%= text_input f, :end_time, type: "datetime", class: "form-control", placeholder: "YYYY-MM-DD HH:mm:ss" %> -->
+    <%= datetime_select f, :end_time, class: "form-control" %>
     <span class="error"><%= error_tag f, :end_time %><span>
   </div>
 
