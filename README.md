@@ -10,6 +10,7 @@ ___
   * HW05 - [Server-Side Game Logic](memory.organizedchaos.me)
   * HW06 - [Task Tracker pt 1](tasktracker.organizedchaos.me)
   * HW07 - [Task Tracker pt 2](tasks2.organizedchaos.me)
+  * Project #1 - [Othello (Game)](othello.organizedchaos.me)
 ___
 
 #### Course Resources:
