@@ -1,0 +1,30 @@
+body {
+  padding-top: 54px;
+  background: #222629;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.card {
+  height: 100%;
+}
+.card-title
+{
+  font-weight: bold;
+}
+.purple-gradient
+{
+  background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+}
+
+.navbar
+{
+  background-color: #C96567;
+  font-weight: bold;
+  color: white;
+
+}
