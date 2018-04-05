@@ -11,6 +11,7 @@ ___
   * HW06 - [Task Tracker pt 1](http://tasktracker.organizedchaos.me)
   * HW07 - [Task Tracker pt 2](http://tasks2.organizedchaos.me)
   * Project #1 - [Othello (Game)](http://othello.organizedchaos.me)
+  * HW08 - [Task Tracker pt 3](https://tasks3.organizedchaos.me)
 ___
 
 #### Course Resources:
