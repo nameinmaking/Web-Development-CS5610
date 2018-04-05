@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 
-import RegistrationForm from './registration-form';
+import UserRegistration from './user-registration';
 // Renders a message telling the user to log in
 export default function NoSession(props) {
   // Toggles the registration form
   function register() {
-    $("#registration-form").show();
-    $("#no-session").hide();
+    $("#user-registration").show();
+    $("#welcome").hide();
   }
 
   return (
@@ -17,12 +17,12 @@ export default function NoSession(props) {
         <Col md="2"></Col>
         <Col md="8">
           <Route path="/" exact={true} render={() =>
-            <RegistrationForm />
+            <UserRegistration />
           } />
         </Col>
         <Col md="2"></Col>
       </Row>
-      <div id="no-session">
+      <div id="welcome">
         <p>
           <span id="login">
             &nbsp; <b>Log in</b> to see your tasks. &nbsp;<br />

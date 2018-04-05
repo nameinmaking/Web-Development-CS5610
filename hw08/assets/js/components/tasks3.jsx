@@ -4,7 +4,7 @@ import { Provider, connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Nav from './nav';
-import NoSession from './no-session';
+import NoSession from './welcome';
 import Main from './main';
 
 // Renders the main application; adapted from Nat's lecture notes

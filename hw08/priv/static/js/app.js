@@ -48729,92 +48729,155 @@ $(function () {
 
 });
 
-;require.register("js/components/dashboard.jsx", function(exports, require, module) {
+;require.register("js/components/create-task.jsx", function(exports, require, module) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Dashboard;
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _task = require('./task');
-
-var _task2 = _interopRequireDefault(_task);
-
-var _reactRouterDom = require('react-router-dom');
+var _reactRedux = require('react-redux');
 
 var _reactstrap = require('reactstrap');
 
-var _editTaskForm = require('./edit-task-form');
+var _api = require('../api');
 
-var _editTaskForm2 = _interopRequireDefault(_editTaskForm);
+var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the edit form (hidden by default) and the tasks;
-// adapted from Nat's lecture notes
-function Dashboard(props) {
-  // Tasks assigned to the user
-  var assigned = _.map(props.tasks, function (tt) {
-    if (props.user == tt.user.id) {
-      return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "self" });
+// Renders the new task form; adapted from Nat's lecture notes
+function CreateTask(props) {
+  // Updates the state with the inputted values from the new task form
+  function update(ev) {
+    var tgt = $(ev.target);
+    var data = {};
+    if (tgt.attr('name') == "completed") {
+      data['completed'] = tgt.is(':checked') ? true : false;
+    } else {
+      data[tgt.attr('name')] = tgt.val();
     }
-  });
-  // Tasks created by the user and assigned to other users
-  var created = _.map(props.tasks, function (tt) {
-    if (props.user == tt.creator.id && props.user != tt.user.id) {
-      return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "other" });
-    }
+    var action = {
+      type: 'UPDATE_FORM',
+      data: data
+    };
+    props.dispatch(action);
+  }
+
+  // Sends a request to create a task with the values from the forms
+  function submit(ev) {
+    _api2.default.submit_task(props.form);
+  }
+
+  // Grabs all of the users to populate the dropdown
+  var users = _.map(props.users, function (uu) {
+    return _react2.default.createElement(
+      'option',
+      { key: uu.id, value: uu.id },
+      uu.name
+    );
   });
 
   return _react2.default.createElement(
     'div',
-    null,
-    _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
-        return _react2.default.createElement(_editTaskForm2.default, null);
-      } }),
+    { style: { padding: "4ex" }, className: 'text-right' },
     _react2.default.createElement(
-      'h3',
-      { className: 'col-md-3 text-center' },
-      'Tasks Assigned ',
+      'h2',
+      { className: 'text-center col-md-5 p-4' },
+      'New Task'
+    ),
+    _react2.default.createElement(
+      _reactstrap.FormGroup,
+      { className: 'row' },
       _react2.default.createElement(
-        'i',
-        null,
-        'to'
+        _reactstrap.Label,
+        { 'for': 'user_id', className: 'col-md-2' },
+        'Assign to'
       ),
-      ' you:'
-    ),
-    _react2.default.createElement(
-      _reactstrap.Row,
-      null,
-      assigned
-    ),
-    _react2.default.createElement(
-      'h3',
-      { className: 'col-md-3 text-center' },
-      'Tasks Assigned ',
       _react2.default.createElement(
-        'i',
-        null,
-        'by'
-      ),
-      ' you:'
+        _reactstrap.Input,
+        { type: 'select', name: 'user_id', value: props.form.user_id,
+          onChange: update, className: 'col-md-1 text-center' },
+        users
+      )
     ),
     _react2.default.createElement(
-      _reactstrap.Row,
-      null,
-      created
+      _reactstrap.FormGroup,
+      { className: 'row' },
+      _react2.default.createElement(
+        _reactstrap.Label,
+        { 'for': 'title', className: 'col-md-2' },
+        'Title'
+      ),
+      _react2.default.createElement(_reactstrap.Input, { type: 'text', name: 'title', value: props.form.title,
+        maxLength: '75', onChange: update, className: 'col-md-3' })
+    ),
+    _react2.default.createElement(
+      _reactstrap.FormGroup,
+      { className: 'row' },
+      _react2.default.createElement(
+        _reactstrap.Label,
+        { className: 'col-md-2', 'for': 'description' },
+        'Description'
+      ),
+      _react2.default.createElement(_reactstrap.Input, { className: 'col-md-3', type: 'textarea', name: 'description', value: props.form.description,
+        onChange: update })
+    ),
+    _react2.default.createElement(
+      _reactstrap.FormGroup,
+      { className: 'row' },
+      _react2.default.createElement(
+        _reactstrap.Label,
+        { 'for': 'time_spent', className: 'col-md-2' },
+        'Minutes Spent (in increments of 15)'
+      ),
+      _react2.default.createElement(_reactstrap.Input, { type: 'number', name: 'time_spent', min: '0', step: '15',
+        value: props.form.time_spent, onChange: update, className: 'col-md-3' })
+    ),
+    _react2.default.createElement(
+      _reactstrap.FormGroup,
+      { check: true, className: 'row' },
+      _react2.default.createElement(
+        'div',
+        { className: 'offset-md-1 col-md-2' },
+        _react2.default.createElement(
+          _reactstrap.Label,
+          { check: true },
+          _react2.default.createElement(_reactstrap.Input, { type: 'checkbox', name: 'completed', onChange: update,
+            checked: props.form.completed ? "checked" : false }),
+          'Completed'
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'col-md-3' },
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          _reactstrap.Button,
+          { onClick: submit, color: 'primary' },
+          'Submit'
+        )
+      )
     )
   );
+};
+
+function state2props(state) {
+  return {
+    form: state.form,
+    users: state.users
+  };
 }
+
+exports.default = (0, _reactRedux.connect)(state2props)(CreateTask);
 
 });
 
-;require.register("js/components/edit-task-form.jsx", function(exports, require, module) {
+require.register("js/components/edit-task.jsx", function(exports, require, module) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48836,7 +48899,7 @@ var _api2 = _interopRequireDefault(_api);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Renders the edit form; adapted from Nat's lecture notes
-function EditTaskForm(props) {
+function EditTask(props) {
   function update(ev) {
     var tgt = $(ev.target);
     var data = {};
@@ -48963,7 +49026,7 @@ function state2props(state) {
   };
 }
 
-exports.default = (0, _reactRedux.connect)(state2props)(EditTaskForm);
+exports.default = (0, _reactRedux.connect)(state2props)(EditTask);
 
 });
 
@@ -48981,26 +49044,26 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = require('react-router-dom');
 
-var _dashboard = require('./dashboard');
+var _userDashboard = require('./user-dashboard');
 
-var _dashboard2 = _interopRequireDefault(_dashboard);
+var _userDashboard2 = _interopRequireDefault(_userDashboard);
 
-var _newTaskForm = require('./new-task-form');
+var _createTask = require('./create-task');
 
-var _newTaskForm2 = _interopRequireDefault(_newTaskForm);
+var _createTask2 = _interopRequireDefault(_createTask);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the dashboard and new task form
+// Renders the user-dashboard and new task form
 function Main(props) {
   return _react2.default.createElement(
     'div',
     null,
     _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
-        return _react2.default.createElement(_dashboard2.default, { tasks: props.tasks, user: props.user });
+        return _react2.default.createElement(_userDashboard2.default, { tasks: props.tasks, user: props.user });
       } }),
     _react2.default.createElement(_reactRouterDom.Route, { path: '/tasks', exact: true, render: function render() {
-        return _react2.default.createElement(_newTaskForm2.default, null);
+        return _react2.default.createElement(_createTask2.default, null);
       } })
   );
 }
@@ -49094,9 +49157,6 @@ var Session = (0, _reactRedux.connect)(function (_ref2) {
     'div',
     { className: 'navbar-text' },
     props.token.user_name,
-    ' (ID: ',
-    props.token.user_id,
-    ')',
     _react2.default.createElement(
       'span',
       null,
@@ -49154,7 +49214,7 @@ function Nav(props) {
         null,
         _react2.default.createElement(
           _reactRouterDom.NavLink,
-          { to: '/tasks', href: '#',
+          { to: '/tasks', href: '#', exact: true,
             className: 'nav-link' },
           'New Task'
         )
@@ -49171,390 +49231,6 @@ function state2props(state) {
 }
 
 exports.default = (0, _reactRedux.connect)(state2props)(Nav);
-
-});
-
-require.register("js/components/new-task-form.jsx", function(exports, require, module) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = require('react-redux');
-
-var _reactstrap = require('reactstrap');
-
-var _api = require('../api');
-
-var _api2 = _interopRequireDefault(_api);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Renders the new task form; adapted from Nat's lecture notes
-function NewTaskForm(props) {
-  // Updates the state with the inputted values from the new task form
-  function update(ev) {
-    var tgt = $(ev.target);
-    var data = {};
-    if (tgt.attr('name') == "completed") {
-      data['completed'] = tgt.is(':checked') ? true : false;
-    } else {
-      data[tgt.attr('name')] = tgt.val();
-    }
-    var action = {
-      type: 'UPDATE_FORM',
-      data: data
-    };
-    props.dispatch(action);
-  }
-
-  // Sends a request to create a task with the values from the forms
-  function submit(ev) {
-    _api2.default.submit_task(props.form);
-  }
-
-  // Grabs all of the users to populate the dropdown
-  var users = _.map(props.users, function (uu) {
-    return _react2.default.createElement(
-      'option',
-      { key: uu.id, value: uu.id },
-      uu.name
-    );
-  });
-
-  return _react2.default.createElement(
-    'div',
-    { style: { padding: "4ex" }, className: 'text-right' },
-    _react2.default.createElement(
-      'h2',
-      { className: 'text-center col-md-5 p-4' },
-      'New Task'
-    ),
-    _react2.default.createElement(
-      _reactstrap.FormGroup,
-      { className: 'row' },
-      _react2.default.createElement(
-        _reactstrap.Label,
-        { 'for': 'user_id', className: 'col-md-2' },
-        'Assignee'
-      ),
-      _react2.default.createElement(
-        _reactstrap.Input,
-        { type: 'select', name: 'user_id', value: props.form.user_id,
-          onChange: update, className: 'col-md-1 text-center' },
-        users
-      )
-    ),
-    _react2.default.createElement(
-      _reactstrap.FormGroup,
-      { className: 'row' },
-      _react2.default.createElement(
-        _reactstrap.Label,
-        { 'for': 'title', className: 'col-md-2' },
-        'Title'
-      ),
-      _react2.default.createElement(_reactstrap.Input, { type: 'text', name: 'title', value: props.form.title,
-        maxLength: '75', onChange: update, className: 'col-md-3' })
-    ),
-    _react2.default.createElement(
-      _reactstrap.FormGroup,
-      { className: 'row' },
-      _react2.default.createElement(
-        _reactstrap.Label,
-        { className: 'col-md-2', 'for': 'description' },
-        'Description'
-      ),
-      _react2.default.createElement(_reactstrap.Input, { className: 'col-md-3', type: 'textarea', name: 'description', value: props.form.description,
-        onChange: update })
-    ),
-    _react2.default.createElement(
-      _reactstrap.FormGroup,
-      { className: 'row' },
-      _react2.default.createElement(
-        _reactstrap.Label,
-        { 'for': 'time_spent', className: 'col-md-2' },
-        'Minutes Spent (in increments of 15)'
-      ),
-      _react2.default.createElement(_reactstrap.Input, { type: 'number', name: 'time_spent', min: '0', step: '15',
-        value: props.form.time_spent, onChange: update, className: 'col-md-3' })
-    ),
-    _react2.default.createElement(
-      _reactstrap.FormGroup,
-      { check: true, className: 'row' },
-      _react2.default.createElement(
-        'div',
-        { className: 'offset-md-1 col-md-2' },
-        _react2.default.createElement(
-          _reactstrap.Label,
-          { check: true },
-          _react2.default.createElement(_reactstrap.Input, { type: 'checkbox', name: 'completed', onChange: update,
-            checked: props.form.completed ? "checked" : false }),
-          'Completed'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'col-md-3' },
-        _react2.default.createElement('br', null),
-        _react2.default.createElement(
-          _reactstrap.Button,
-          { onClick: submit, color: 'primary' },
-          'Submit'
-        )
-      )
-    )
-  );
-};
-
-function state2props(state) {
-  return {
-    form: state.form,
-    users: state.users
-  };
-}
-
-exports.default = (0, _reactRedux.connect)(state2props)(NewTaskForm);
-
-});
-
-require.register("js/components/no-session.jsx", function(exports, require, module) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = NoSession;
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = require('react-router-dom');
-
-var _reactstrap = require('reactstrap');
-
-var _registrationForm = require('./registration-form');
-
-var _registrationForm2 = _interopRequireDefault(_registrationForm);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Renders a message telling the user to log in
-function NoSession(props) {
-  // Toggles the registration form
-  function register() {
-    $("#registration-form").show();
-    $("#no-session").hide();
-  }
-
-  return _react2.default.createElement(
-    'div',
-    null,
-    _react2.default.createElement(
-      _reactstrap.Row,
-      null,
-      _react2.default.createElement(_reactstrap.Col, { md: '2' }),
-      _react2.default.createElement(
-        _reactstrap.Col,
-        { md: '8' },
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
-            return _react2.default.createElement(_registrationForm2.default, null);
-          } })
-      ),
-      _react2.default.createElement(_reactstrap.Col, { md: '2' })
-    ),
-    _react2.default.createElement(
-      'div',
-      { id: 'no-session' },
-      _react2.default.createElement(
-        'p',
-        null,
-        _react2.default.createElement(
-          'span',
-          { id: 'login' },
-          '\xA0 ',
-          _react2.default.createElement(
-            'b',
-            null,
-            'Log in'
-          ),
-          ' to see your tasks. \xA0',
-          _react2.default.createElement('br', null)
-        ),
-        'or',
-        _react2.default.createElement('br', null),
-        ' Register ',
-        _react2.default.createElement(
-          'a',
-          { href: 'javascript:void(0)',
-            onClick: register },
-          _react2.default.createElement(
-            'span',
-            { id: 'register' },
-            'here'
-          )
-        ),
-        '.'
-      )
-    )
-  );
-}
-
-});
-
-;require.register("js/components/registration-form.jsx", function(exports, require, module) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = require('react-redux');
-
-var _reactstrap = require('reactstrap');
-
-var _api = require('../api');
-
-var _api2 = _interopRequireDefault(_api);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Renders the registration form
-function RegistrationForm(props) {
-  // Updates the state with the inputted values from the registration form
-  function update(ev) {
-    var tgt = $(ev.target);
-    var data = {};
-    data[tgt.attr('name')] = tgt.val();
-    var action = {
-      type: 'UPDATE_REGISTRATION_FORM',
-      data: data
-    };
-    props.dispatch(action);
-  }
-
-  // Sends a request to create a user with the values from the forms
-  function submit(ev) {
-    _api2.default.create_user(props.form);
-  }
-
-  // Clears all of the fields and closes the form
-  function cancel() {
-    props.dispatch({
-      type: 'CLEAR_FORM'
-    });
-    $("#registration-form").hide();
-    $("#no-session").show();
-  }
-
-  return _react2.default.createElement(
-    'div',
-    { id: 'registration-form' },
-    _react2.default.createElement(
-      'div',
-      { className: 'p-4 col-md-5 text-right' },
-      _react2.default.createElement(
-        'u',
-        null,
-        _react2.default.createElement(
-          'b',
-          null,
-          _react2.default.createElement(
-            'h2',
-            null,
-            'Account Registeration Form'
-          )
-        )
-      )
-    ),
-    _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-        'div',
-        { className: 'p-4 text-right' },
-        _react2.default.createElement(
-          _reactstrap.FormGroup,
-          { className: 'row' },
-          _react2.default.createElement(
-            _reactstrap.Label,
-            { 'for': 'email', className: 'col-md-2' },
-            _react2.default.createElement(
-              'b',
-              null,
-              'Email:'
-            )
-          ),
-          _react2.default.createElement(_reactstrap.Input, { type: 'email', name: 'email', value: props.form.email,
-            onChange: update, placeholder: 'user@example.com', className: 'col-md-3' })
-        ),
-        _react2.default.createElement(
-          _reactstrap.FormGroup,
-          { className: 'row' },
-          _react2.default.createElement(
-            _reactstrap.Label,
-            { 'for': 'name', className: 'col-md-2' },
-            _react2.default.createElement(
-              'b',
-              null,
-              'Name:'
-            )
-          ),
-          _react2.default.createElement(_reactstrap.Input, { type: 'text', name: 'name', value: props.form.name,
-            onChange: update, className: 'col-md-3' })
-        ),
-        _react2.default.createElement(
-          _reactstrap.FormGroup,
-          { className: 'row' },
-          _react2.default.createElement(
-            _reactstrap.Label,
-            { 'for': 'password', className: 'col-md-2' },
-            _react2.default.createElement(
-              'b',
-              null,
-              'Password:'
-            )
-          ),
-          _react2.default.createElement(_reactstrap.Input, { type: 'password', name: 'password', value: props.form.password,
-            onChange: update, placeholder: '(must be at least 8 characters)', className: 'col-md-3' })
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'text-right col-md-5' },
-        _react2.default.createElement(
-          _reactstrap.Button,
-          { onClick: submit, color: 'success' },
-          'Submit'
-        ),
-        _react2.default.createElement(
-          _reactstrap.Button,
-          { onClick: cancel, color: 'warning' },
-          'Cancel'
-        )
-      )
-    )
-  );
-};
-
-function state2props(state) {
-  console.log("STATE");
-  console.log(state);
-  return {
-    form: state.register
-  };
-}
-
-exports.default = (0, _reactRedux.connect)(state2props)(RegistrationForm);
 
 });
 
@@ -49752,9 +49428,9 @@ var _nav = require('./nav');
 
 var _nav2 = _interopRequireDefault(_nav);
 
-var _noSession = require('./no-session');
+var _welcome = require('./welcome');
 
-var _noSession2 = _interopRequireDefault(_noSession);
+var _welcome2 = _interopRequireDefault(_welcome);
 
 var _main = require('./main');
 
@@ -49775,7 +49451,7 @@ var Tasks3 = (0, _reactRedux.connect)(function (state) {
   return state;
 })(function (props) {
   // Choose what to render depending on whether or not the user is logged in
-  var main = !props.form.token ? _react2.default.createElement(_noSession2.default, null) : _react2.default.createElement(_main2.default, { tasks: props.tasks, user: props.form.creator_id });
+  var main = !props.form.token ? _react2.default.createElement(_welcome2.default, null) : _react2.default.createElement(_main2.default, { tasks: props.tasks, user: props.form.creator_id });
 
   return _react2.default.createElement(
     _reactRouterDom.BrowserRouter,
@@ -49791,7 +49467,331 @@ var Tasks3 = (0, _reactRedux.connect)(function (state) {
 
 });
 
-require.register("js/socket.js", function(exports, require, module) {
+require.register("js/components/user-dashboard.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Dashboard;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _task = require('./task');
+
+var _task2 = _interopRequireDefault(_task);
+
+var _reactRouterDom = require('react-router-dom');
+
+var _reactstrap = require('reactstrap');
+
+var _editTask = require('./edit-task');
+
+var _editTask2 = _interopRequireDefault(_editTask);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Renders the edit form (hidden by default) and the tasks;
+// adapted from Nat's lecture notes
+function Dashboard(props) {
+  // Tasks assigned to the user
+  var assigned = _.map(props.tasks, function (tt) {
+    if (props.user == tt.user.id) {
+      return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "self" });
+    }
+  });
+  // Tasks created by the user and assigned to other users
+  var created = _.map(props.tasks, function (tt) {
+    if (props.user == tt.creator.id && props.user != tt.user.id) {
+      return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "other" });
+    }
+  });
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
+        return _react2.default.createElement(_editTask2.default, null);
+      } }),
+    _react2.default.createElement(
+      'h3',
+      { className: 'col-md-3 text-center' },
+      'Tasks Assigned ',
+      _react2.default.createElement(
+        'i',
+        null,
+        'to'
+      ),
+      ' you:'
+    ),
+    _react2.default.createElement(
+      _reactstrap.Row,
+      null,
+      assigned
+    ),
+    _react2.default.createElement(
+      'h3',
+      { className: 'col-md-3 text-center' },
+      'Tasks Assigned ',
+      _react2.default.createElement(
+        'i',
+        null,
+        'by'
+      ),
+      ' you:'
+    ),
+    _react2.default.createElement(
+      _reactstrap.Row,
+      null,
+      created
+    )
+  );
+}
+
+});
+
+;require.register("js/components/user-registration.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _reactstrap = require('reactstrap');
+
+var _api = require('../api');
+
+var _api2 = _interopRequireDefault(_api);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Renders the registration form
+function UserRegistration(props) {
+  // Updates the state with the inputted values from the registration form
+  function update(ev) {
+    var tgt = $(ev.target);
+    var data = {};
+    data[tgt.attr('name')] = tgt.val();
+    var action = {
+      type: 'UPDATE_REGISTRATION_FORM',
+      data: data
+    };
+    props.dispatch(action);
+  }
+
+  // Sends a request to create a user with the values from the forms
+  function submit(ev) {
+    _api2.default.create_user(props.form);
+    props.dispatch({
+      type: 'CLEAR_FORM'
+    });
+  }
+
+  // Clears all of the fields and closes the form
+  function cancel() {
+    props.dispatch({
+      type: 'CLEAR_FORM'
+    });
+    $("#user-registration").hide();
+    $("#welcome").show();
+  }
+
+  return _react2.default.createElement(
+    'div',
+    { id: 'user-registration' },
+    _react2.default.createElement(
+      'div',
+      { className: 'p-4 col-md-5 text-right' },
+      _react2.default.createElement(
+        'u',
+        null,
+        _react2.default.createElement(
+          'b',
+          null,
+          _react2.default.createElement(
+            'h2',
+            null,
+            'Account Registeration Form'
+          )
+        )
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'div',
+        { className: 'p-4 text-right' },
+        _react2.default.createElement(
+          _reactstrap.FormGroup,
+          { className: 'row' },
+          _react2.default.createElement(
+            _reactstrap.Label,
+            { 'for': 'email', className: 'col-md-2' },
+            _react2.default.createElement(
+              'b',
+              null,
+              'Email:'
+            )
+          ),
+          _react2.default.createElement(_reactstrap.Input, { type: 'email', name: 'email', value: props.form.email,
+            onChange: update, placeholder: 'user@example.com', className: 'col-md-3' })
+        ),
+        _react2.default.createElement(
+          _reactstrap.FormGroup,
+          { className: 'row' },
+          _react2.default.createElement(
+            _reactstrap.Label,
+            { 'for': 'name', className: 'col-md-2' },
+            _react2.default.createElement(
+              'b',
+              null,
+              'Name:'
+            )
+          ),
+          _react2.default.createElement(_reactstrap.Input, { type: 'text', name: 'name', value: props.form.name,
+            onChange: update, className: 'col-md-3' })
+        ),
+        _react2.default.createElement(
+          _reactstrap.FormGroup,
+          { className: 'row' },
+          _react2.default.createElement(
+            _reactstrap.Label,
+            { 'for': 'password', className: 'col-md-2' },
+            _react2.default.createElement(
+              'b',
+              null,
+              'Password:'
+            )
+          ),
+          _react2.default.createElement(_reactstrap.Input, { type: 'password', name: 'password', value: props.form.password,
+            onChange: update, placeholder: '(must be at least 8 characters)', className: 'col-md-3' })
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'text-right col-md-5' },
+        _react2.default.createElement(
+          _reactstrap.Button,
+          { onClick: submit, color: 'success' },
+          'Submit'
+        ),
+        _react2.default.createElement(
+          _reactstrap.Button,
+          { onClick: cancel, color: 'warning' },
+          'Cancel'
+        )
+      )
+    )
+  );
+};
+
+function state2props(state) {
+  console.log("STATE");
+  console.log(state);
+  return {
+    form: state.register
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(state2props)(UserRegistration);
+
+});
+
+require.register("js/components/welcome.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = NoSession;
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = require('react-router-dom');
+
+var _reactstrap = require('reactstrap');
+
+var _userRegistration = require('./user-registration');
+
+var _userRegistration2 = _interopRequireDefault(_userRegistration);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Renders a message telling the user to log in
+function NoSession(props) {
+  // Toggles the registration form
+  function register() {
+    $("#user-registration").show();
+    $("#welcome").hide();
+  }
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      _reactstrap.Row,
+      null,
+      _react2.default.createElement(_reactstrap.Col, { md: '2' }),
+      _react2.default.createElement(
+        _reactstrap.Col,
+        { md: '8' },
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
+            return _react2.default.createElement(_userRegistration2.default, null);
+          } })
+      ),
+      _react2.default.createElement(_reactstrap.Col, { md: '2' })
+    ),
+    _react2.default.createElement(
+      'div',
+      { id: 'welcome' },
+      _react2.default.createElement(
+        'p',
+        null,
+        _react2.default.createElement(
+          'span',
+          { id: 'login' },
+          '\xA0 ',
+          _react2.default.createElement(
+            'b',
+            null,
+            'Log in'
+          ),
+          ' to see your tasks. \xA0',
+          _react2.default.createElement('br', null)
+        ),
+        'or',
+        _react2.default.createElement('br', null),
+        ' Register ',
+        _react2.default.createElement(
+          'a',
+          { href: 'javascript:void(0)',
+            onClick: register },
+          _react2.default.createElement(
+            'span',
+            { id: 'register' },
+            'here'
+          )
+        ),
+        '.'
+      )
+    )
+  );
+}
+
+});
+
+;require.register("js/socket.js", function(exports, require, module) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

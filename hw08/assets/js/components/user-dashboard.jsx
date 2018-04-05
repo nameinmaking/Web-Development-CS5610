@@ -3,7 +3,7 @@ import Task from './task';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row } from 'reactstrap';
 
-import EditTaskForm from './edit-task-form';
+import EditTask from './edit-task';
 
 // Renders the edit form (hidden by default) and the tasks;
 // adapted from Nat's lecture notes
@@ -24,7 +24,7 @@ export default function Dashboard(props) {
   return (
     <div >
       <Route path="/" exact={true} render={() =>
-        <EditTaskForm />
+        <EditTask />
       } />
       <h3 className="col-md-3 text-center">Tasks Assigned <i>to</i> you:</h3>
       <Row>{assigned}</Row>

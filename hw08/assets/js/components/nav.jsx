@@ -51,7 +51,7 @@ let Session = connect(({token}) => {return {token};})((props) => {
 
   return (
     <div className="navbar-text">
-      {props.token.user_name} (ID: {props.token.user_id})
+      {props.token.user_name}
       <span>|</span>
       <a href="javascript:void(0)" onClick={destroy_token}>Log Out</a>
     </div>
@@ -80,7 +80,7 @@ function Nav(props) {
             className="nav-link">Dashboard</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink to="/tasks" href="#"
+          <NavLink to="/tasks" href="#" exact={true}
             className="nav-link">New Task
           </NavLink>
         </NavItem>

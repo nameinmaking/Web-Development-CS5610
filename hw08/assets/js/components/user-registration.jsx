@@ -5,7 +5,7 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 import api from '../api';
 
 // Renders the registration form
-function RegistrationForm(props) {
+function UserRegistration(props) {
   // Updates the state with the inputted values from the registration form
   function update(ev) {
     let tgt = $(ev.target);
@@ -21,6 +21,9 @@ function RegistrationForm(props) {
   // Sends a request to create a user with the values from the forms
   function submit(ev) {
     api.create_user(props.form);
+    props.dispatch({
+      type: 'CLEAR_FORM',
+    });
   }
 
   // Clears all of the fields and closes the form
@@ -28,12 +31,12 @@ function RegistrationForm(props) {
     props.dispatch({
       type: 'CLEAR_FORM',
     });
-    $("#registration-form").hide();
-    $("#no-session").show();
+    $("#user-registration").hide();
+    $("#welcome").show();
   }
 
   return (
-    <div id="registration-form">
+    <div id="user-registration">
       <div className="p-4 col-md-5 text-right">
         <u><b><h2>Account Registeration Form</h2></b></u>
       </div>
@@ -73,4 +76,4 @@ function state2props(state) {
   };
 }
 
-export default connect(state2props)(RegistrationForm);
+export default connect(state2props)(UserRegistration);

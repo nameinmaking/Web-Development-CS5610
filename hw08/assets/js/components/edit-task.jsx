@@ -5,7 +5,7 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 import api from '../api';
 
 // Renders the edit form; adapted from Nat's lecture notes
-function EditTaskForm(props) {
+function EditTask(props) {
   function update(ev) {
     let tgt = $(ev.target);
     let data = {};
@@ -88,4 +88,4 @@ function state2props(state) {
   };
 }
 
-export default connect(state2props)(EditTaskForm);
+export default connect(state2props)(EditTask);

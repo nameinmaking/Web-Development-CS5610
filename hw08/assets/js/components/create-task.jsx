@@ -5,7 +5,7 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 import api from '../api';
 
 // Renders the new task form; adapted from Nat's lecture notes
-function NewTaskForm(props) {
+function CreateTask(props) {
   // Updates the state with the inputted values from the new task form
   function update(ev) {
     let tgt = $(ev.target);
@@ -36,7 +36,7 @@ function NewTaskForm(props) {
     <div style={{padding: "4ex"}} className="text-right">
       <h2 className="text-center col-md-5 p-4">New Task</h2>
       <FormGroup className="row">
-        <Label for="user_id" className="col-md-2">Assignee</Label>
+        <Label for="user_id" className="col-md-2">Assign to</Label>
         <Input type="select" name="user_id" value={props.form.user_id}
           onChange={update} className="col-md-1 text-center">
           {users}
@@ -85,4 +85,4 @@ function state2props(state) {
   };
 }
 
-export default connect(state2props)(NewTaskForm);
+export default connect(state2props)(CreateTask);

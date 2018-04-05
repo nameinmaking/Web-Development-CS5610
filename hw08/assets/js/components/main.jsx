@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Dashboard from './dashboard';
-import NewTaskForm from './new-task-form';
+import Dashboard from './user-dashboard';
+import CreateTask from './create-task';
 
-// Renders the dashboard and new task form
+// Renders the user-dashboard and new task form
 export default function Main(props) {
   return (
     <div>
@@ -12,7 +12,7 @@ export default function Main(props) {
         <Dashboard tasks={props.tasks} user={props.user} />
       } />
       <Route path="/tasks" exact={true} render={() =>
-        <NewTaskForm />
+        <CreateTask />
       } />
     </div>
   );
