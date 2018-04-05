@@ -6036,17 +6036,12 @@ h3 {
   font-size: 27px;
   font-weight: bold; }
 
-#welcome p {
+#welcome {
   text-align: center;
-  margin-top: 18%;
-  font-size: 30px; }
+  margin-top: 20%; }
 
 #welcome a {
-  color: #7eaebc;
-  text-decoration: none; }
-
-#welcome a:hover {
-  color: #618c99; }
+  color: dodgerblue; }
 
 .navbar {
   background-color: #e3f2fd; }
@@ -6060,9 +6055,6 @@ h3 {
 
 .navbar-text button {
   margin-left: 6px; }
-
-.navbar-text a {
-  text-decoration: none; }
 
 #edit-form {
   display: none; }

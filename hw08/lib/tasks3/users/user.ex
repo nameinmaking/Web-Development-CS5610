@@ -19,14 +19,12 @@ defmodule Tasks3.Users.User do
     |> validate_password(:password)
     |> put_pass_hash()
     |> validate_required([:email, :name, :password_hash])
-    # Regex taken from: https://gist.github.com/mgamini/4f3a8bc55bdcc96be2c6
     |> validate_format(:email, ~r/^[A-Za-z0-9._%+-+']+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/)
     |> update_change(:email, &String.downcase/1)
     |> unique_constraint(:email)
   end
 
-  # Password validation; taken from Nat's lecture notes
-  # From Comeonin docs
+
   def validate_password(changeset, field, options \\ []) do
     validate_change(changeset, field, fn _, password ->
       case valid_password?(password) do

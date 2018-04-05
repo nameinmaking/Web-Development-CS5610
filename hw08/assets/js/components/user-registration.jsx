@@ -4,30 +4,33 @@ import { Button, FormGroup, Label, Input } from 'reactstrap';
 
 import api from '../api';
 
-// Renders the registration form
-function UserRegistration(props) {
-  // Updates the state with the inputted values from the registration form
-  function update(ev) {
+function UserRegistration(props)
+{
+  function update(ev)
+  {
     let tgt = $(ev.target);
     let data = {};
+
     data[tgt.attr('name')] = tgt.val();
+
     let action = {
       type: 'UPDATE_REGISTRATION_FORM',
       data: data
     };
+
     props.dispatch(action);
   }
 
-  // Sends a request to create a user with the values from the forms
-  function submit(ev) {
+  function submit(ev)
+  {
     api.create_user(props.form);
     props.dispatch({
       type: 'CLEAR_FORM',
     });
   }
 
-  // Clears all of the fields and closes the form
-  function cancel() {
+  function cancel()
+  {
     props.dispatch({
       type: 'CLEAR_FORM',
     });

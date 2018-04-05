@@ -3,77 +3,54 @@
 body
 {
   font-family: Arial;
-background-color: #FFEFD5;
+  background-color: #FFEFD5;
 }
-h3 {
+
+h3
+{
   margin-top: 20px;
   color: #2d2d2d;
   font-size: 27px;
   font-weight: bold;
 }
 
-#welcome p {
+#welcome
+{
   text-align: center;
-  margin-top: 18%;
-  font-size: 30px;
+  margin-top: 20%;
 }
 
-#welcome a {
-  color: #7eaebc;
-  text-decoration: none;
-}
+#welcome a {  color: dodgerblue;   }
 
-#welcome a:hover {
-  color: #618c99;
-}
-.navbar{
-  background-color: #e3f2fd;
-}
-.navbar-text span {
+.navbar {  background-color: #e3f2fd; }
+
+.navbar-text span
+{
   padding-left: 15px;
   padding-right: 15px;
 }
 
-.navbar-text input {
-  margin-left: 6px;
-}
+.navbar-text input {  margin-left: 6px;   }
 
-.navbar-text button {
-  margin-left: 6px;
-}
+.navbar-text button {  margin-left: 6px;  }
 
-.navbar-text a {
-  text-decoration: none;
-}
 
-#edit-form {
-  display: none;
-}
+#edit-form {  display: none;  }
 
-#edit-form button {
-  margin-right: 10px;
-}
+#edit-form button {  margin-right: 10px;  }
 
-#user-registration {
-  display: none;
-}
+#user-registration {  display: none;  }
 
-#user-registration button {
-  margin-right: 10px;
-}
+#user-registration button {  margin-right: 10px;  }
 
-#login{
-  background-color: tomato;
-}
-#register{
+#login  {  background-color: tomato;  }
+
+#register
+{
   background-color: white;
   font-weight: bold;
 }
 
-.ch{
-  font-weight: bold;
-}
-.Label
-{
-  font-weight: bold;
-}
+.ch {  font-weight: bold;  }
+
+.Label  {  font-weight: bold; }

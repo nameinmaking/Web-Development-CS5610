@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 
 import api from '../api';
 
-// Renders the navigation bar; adapted from Nat's lecture notes
 let LoginForm = connect(({login}) => {return {login};})((props) => {
-  // Updates the state with the inputted values from the log-in form
-  function update(ev) {
+  function update(ev)
+  {
     let tgt = $(ev.target);
     let data = {};
+
     data[tgt.attr('name')] = tgt.val();
     props.dispatch({
       type: 'UPDATE_LOGIN_FORM',
@@ -18,8 +18,8 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
     });
   }
 
-  // Sends a request with the values from the log-in form to create a token
-  function create_token(ev) {
+  function create_token(ev)
+  {
     api.submit_login(props.login);
   }
 
@@ -30,20 +30,21 @@ let LoginForm = connect(({login}) => {return {login};})((props) => {
           <Input type="text" name="email" placeholder="user@example.com"
             value={props.login.email} onChange={update} />
         </FormGroup>
+
         <FormGroup>
           <Input type="password" name="pass" placeholder="password"
             value={props.login.pass} onChange={update} />
         </FormGroup>
+
         <Button onClick={create_token} className="btn btn-dark">Log In</Button>
       </Form>
     </div>
   );
 });
 
-// Displays the user's name in the top right
 let Session = connect(({token}) => {return {token};})((props) => {
-  // Sends a request to destroy the current token
-  function destroy_token() {
+  function destroy_token()
+  {
     props.dispatch({
       type: 'DESTROY_TOKEN'
     });
@@ -58,14 +59,16 @@ let Session = connect(({token}) => {return {token};})((props) => {
   );
 });
 
-// Displays either the user's name or the log-in form
-function Nav(props) {
+function Nav(props)
+{
   let session_info;
 
-  if (props.token) {
+  if (props.token)
+  {
     session_info = <Session token={props.token} />;
   }
-  else {
+  else
+  {
     session_info = <LoginForm />
   }
 

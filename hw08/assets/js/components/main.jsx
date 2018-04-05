@@ -4,13 +4,14 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Dashboard from './user-dashboard';
 import CreateTask from './create-task';
 
-// Renders the user-dashboard and new task form
-export default function Main(props) {
+export default function Main(props)
+{
   return (
     <div>
       <Route path="/" exact={true} render={() =>
         <Dashboard tasks={props.tasks} user={props.user} />
       } />
+
       <Route path="/tasks" exact={true} render={() =>
         <CreateTask />
       } />

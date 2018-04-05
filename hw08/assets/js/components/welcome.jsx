@@ -3,10 +3,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 
 import UserRegistration from './user-registration';
-// Renders a message telling the user to log in
 export default function NoSession(props) {
-  // Toggles the registration form
-  function register() {
+  function register()
+  {
     $("#user-registration").show();
     $("#welcome").hide();
   }
@@ -24,6 +23,7 @@ export default function NoSession(props) {
       </Row>
       <div id="welcome">
         <p>
+          <h2>
           <span id="login">
             &nbsp; <b>Log in</b> to see your tasks. &nbsp;<br />
           </span>
@@ -33,6 +33,7 @@ export default function NoSession(props) {
           <span id="register">
             here
           </span></a>.
+        </h2>
         </p>
       </div>
     </div>

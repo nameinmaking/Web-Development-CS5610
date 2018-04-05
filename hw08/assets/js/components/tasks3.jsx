@@ -7,8 +7,8 @@ import Nav from './nav';
 import NoSession from './welcome';
 import Main from './main';
 
-// Renders the main application; adapted from Nat's lecture notes
-export default function tasks3_init(store) {
+export default function tasks3_init(store)
+{
   ReactDOM.render(
     <Provider store={store}>
       <Tasks3 state={store.getState()} />
@@ -18,7 +18,6 @@ export default function tasks3_init(store) {
 }
 
 let Tasks3 = connect((state) => state)((props) => {
-  // Choose what to render depending on whether or not the user is logged in
   let main = !props.form.token ? <NoSession /> :
   <Main tasks={props.tasks} user={props.form.creator_id} />;
 

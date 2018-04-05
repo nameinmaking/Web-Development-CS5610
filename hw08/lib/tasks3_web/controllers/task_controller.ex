@@ -11,7 +11,6 @@ defmodule Tasks3Web.TaskController do
     render(conn, "index.json", tasks: tasks)
   end
 
-  # Taken from Nat's lecture notes
   def create(conn, %{"task" => task_params}) do
     with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
       conn
@@ -27,11 +26,9 @@ defmodule Tasks3Web.TaskController do
   end
 
   def update(conn, %{"task" => task_params}) do
-    # Get the task id and convert it to an int
     id = Map.get(task_params, "id")
     |> String.to_integer()
 
-    # Get the task to be updated
     task = Tasks.get_task!(id)
 
     with {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
@@ -52,3 +49,4 @@ defmodule Tasks3Web.TaskController do
     end
   end
 end
+#Attribute: Nat's notes

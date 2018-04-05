@@ -22,8 +22,6 @@ defmodule Tasks3.Tasks.Task do
     |> validate_time(:time_spent)
   end
 
-  # Checks that the time spent is in 15-minute increments;
-  # adapted from https://medium.com/@QuantLayer/writing-custom-validations-for-ecto-changesets-4971881c7684
   def validate_time(changeset, field, options \\ []) do
     validate_change(changeset, field, fn _, time ->
       case rem(time, 15) == 0 do

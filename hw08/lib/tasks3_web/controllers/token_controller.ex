@@ -1,4 +1,3 @@
-# Taken from Nat's lecture notes
 defmodule Tasks3Web.TokenController do
   use Tasks3Web, :controller
   alias Tasks3.Users.User
@@ -14,3 +13,4 @@ defmodule Tasks3Web.TokenController do
     end
   end
 end
+#Attribute: Nat's notes

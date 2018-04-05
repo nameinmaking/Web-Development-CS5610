@@ -48750,17 +48750,17 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the new task form; adapted from Nat's lecture notes
 function CreateTask(props) {
-  // Updates the state with the inputted values from the new task form
   function update(ev) {
     var tgt = $(ev.target);
     var data = {};
+
     if (tgt.attr('name') == "completed") {
       data['completed'] = tgt.is(':checked') ? true : false;
     } else {
       data[tgt.attr('name')] = tgt.val();
     }
+
     var action = {
       type: 'UPDATE_FORM',
       data: data
@@ -48768,12 +48768,10 @@ function CreateTask(props) {
     props.dispatch(action);
   }
 
-  // Sends a request to create a task with the values from the forms
   function submit(ev) {
     _api2.default.submit_task(props.form);
   }
 
-  // Grabs all of the users to populate the dropdown
   var users = _.map(props.users, function (uu) {
     return _react2.default.createElement(
       'option',
@@ -48898,31 +48896,31 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the edit form; adapted from Nat's lecture notes
 function EditTask(props) {
   function update(ev) {
     var tgt = $(ev.target);
     var data = {};
+
     if (tgt.attr('name') == "completed") {
       data['completed'] = tgt.is(':checked') ? true : false;
     } else {
       data[tgt.attr('name')] = tgt.val();
     }
-    // Send the hidden task id as well, which is needed to update the task
+
     data['id'] = $('input[name="id"]').val();
+
     var action = {
       type: 'UPDATE_FORM',
       data: data
     };
+
     props.dispatch(action);
   }
 
-  // Sends a request to update the task
   function submit(ev) {
     _api2.default.edit_task(props.form);
   }
 
-  // Clears all of the fields and closes the form
   function cancel() {
     props.dispatch({
       type: 'CLEAR_FORM'
@@ -48930,7 +48928,6 @@ function EditTask(props) {
     $("#edit-form").hide();
   }
 
-  // Grabs all of the users to populate the dropdown
   var users = _.map(props.users, function (uu) {
     return _react2.default.createElement(
       'option',
@@ -49054,7 +49051,6 @@ var _createTask2 = _interopRequireDefault(_createTask);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the user-dashboard and new task form
 function Main(props) {
   return _react2.default.createElement(
     'div',
@@ -49093,15 +49089,14 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the navigation bar; adapted from Nat's lecture notes
 var LoginForm = (0, _reactRedux.connect)(function (_ref) {
   var login = _ref.login;
   return { login: login };
 })(function (props) {
-  // Updates the state with the inputted values from the log-in form
   function update(ev) {
     var tgt = $(ev.target);
     var data = {};
+
     data[tgt.attr('name')] = tgt.val();
     props.dispatch({
       type: 'UPDATE_LOGIN_FORM',
@@ -49109,7 +49104,6 @@ var LoginForm = (0, _reactRedux.connect)(function (_ref) {
     });
   }
 
-  // Sends a request with the values from the log-in form to create a token
   function create_token(ev) {
     _api2.default.submit_login(props.login);
   }
@@ -49141,12 +49135,10 @@ var LoginForm = (0, _reactRedux.connect)(function (_ref) {
   );
 });
 
-// Displays the user's name in the top right
 var Session = (0, _reactRedux.connect)(function (_ref2) {
   var token = _ref2.token;
   return { token: token };
 })(function (props) {
-  // Sends a request to destroy the current token
   function destroy_token() {
     props.dispatch({
       type: 'DESTROY_TOKEN'
@@ -49170,7 +49162,6 @@ var Session = (0, _reactRedux.connect)(function (_ref2) {
   );
 });
 
-// Displays either the user's name or the log-in form
 function Nav(props) {
   var session_info = void 0;
 
@@ -49259,10 +49250,8 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the details of an individual task as a card
 function Task(props) {
   var task = props.task;
-  // Decide whether to display the assignee or the assigner
   var assign = props.type == "self" ? _react2.default.createElement(
     'p',
     null,
@@ -49285,13 +49274,10 @@ function Task(props) {
     ' '
   );
 
-  // Sends a request to delete the task
   function delete_task() {
     _api2.default.delete_task(task.id);
   }
 
-  // Displays the edit form, populates the hidden field with the task id, and
-  // clears all other fields
   function edit_task() {
     $("#edit-form").show();
     props.dispatch({
@@ -49300,7 +49286,6 @@ function Task(props) {
     $('input[name="id"]').val(task.id);
   }
 
-  // Returns the task details as a Bootstrap card element
   return _react2.default.createElement(
     _reactstrap.Col,
     { md: '3' },
@@ -49438,7 +49423,6 @@ var _main2 = _interopRequireDefault(_main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the main application; adapted from Nat's lecture notes
 function tasks3_init(store) {
   _reactDom2.default.render(_react2.default.createElement(
     _reactRedux.Provider,
@@ -49450,7 +49434,6 @@ function tasks3_init(store) {
 var Tasks3 = (0, _reactRedux.connect)(function (state) {
   return state;
 })(function (props) {
-  // Choose what to render depending on whether or not the user is logged in
   var main = !props.form.token ? _react2.default.createElement(_welcome2.default, null) : _react2.default.createElement(_main2.default, { tasks: props.tasks, user: props.form.creator_id });
 
   return _react2.default.createElement(
@@ -49493,16 +49476,13 @@ var _editTask2 = _interopRequireDefault(_editTask);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the edit form (hidden by default) and the tasks;
-// adapted from Nat's lecture notes
 function Dashboard(props) {
-  // Tasks assigned to the user
   var assigned = _.map(props.tasks, function (tt) {
     if (props.user == tt.user.id) {
       return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "self" });
     }
   });
-  // Tasks created by the user and assigned to other users
+
   var created = _.map(props.tasks, function (tt) {
     if (props.user == tt.creator.id && props.user != tt.user.id) {
       return _react2.default.createElement(_task2.default, { key: tt.id, task: tt, id: tt.id, type: "other" });
@@ -49573,21 +49553,21 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders the registration form
 function UserRegistration(props) {
-  // Updates the state with the inputted values from the registration form
   function update(ev) {
     var tgt = $(ev.target);
     var data = {};
+
     data[tgt.attr('name')] = tgt.val();
+
     var action = {
       type: 'UPDATE_REGISTRATION_FORM',
       data: data
     };
+
     props.dispatch(action);
   }
 
-  // Sends a request to create a user with the values from the forms
   function submit(ev) {
     _api2.default.create_user(props.form);
     props.dispatch({
@@ -49595,7 +49575,6 @@ function UserRegistration(props) {
     });
   }
 
-  // Clears all of the fields and closes the form
   function cancel() {
     props.dispatch({
       type: 'CLEAR_FORM'
@@ -49728,9 +49707,7 @@ var _userRegistration2 = _interopRequireDefault(_userRegistration);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Renders a message telling the user to log in
 function NoSession(props) {
-  // Toggles the registration form
   function register() {
     $("#user-registration").show();
     $("#welcome").hide();
@@ -49759,31 +49736,35 @@ function NoSession(props) {
         'p',
         null,
         _react2.default.createElement(
-          'span',
-          { id: 'login' },
-          '\xA0 ',
-          _react2.default.createElement(
-            'b',
-            null,
-            'Log in'
-          ),
-          ' to see your tasks. \xA0',
-          _react2.default.createElement('br', null)
-        ),
-        'or',
-        _react2.default.createElement('br', null),
-        ' Register ',
-        _react2.default.createElement(
-          'a',
-          { href: 'javascript:void(0)',
-            onClick: register },
+          'h2',
+          null,
           _react2.default.createElement(
             'span',
-            { id: 'register' },
-            'here'
-          )
-        ),
-        '.'
+            { id: 'login' },
+            '\xA0 ',
+            _react2.default.createElement(
+              'b',
+              null,
+              'Log in'
+            ),
+            ' to see your tasks. \xA0',
+            _react2.default.createElement('br', null)
+          ),
+          'or',
+          _react2.default.createElement('br', null),
+          ' Register ',
+          _react2.default.createElement(
+            'a',
+            { href: 'javascript:void(0)',
+              onClick: register },
+            _react2.default.createElement(
+              'span',
+              { id: 'register' },
+              'here'
+            )
+          ),
+          '.'
+        )
       )
     )
   );
