@@ -12,7 +12,7 @@ ___
   * HW07 - [Task Tracker pt 2](http://tasks2.organizedchaos.me)
   * Project #1 - [Othello (Game)](http://othello.organizedchaos.me)
   * HW08 - [Task Tracker pt 3](https://tasks3.organizedchaos.me)
-  * Project #2 - [WebCoin - Cryptocurrency Price Tracker)](https://webcoin.organizedchaos.me)
+  * Project #2 - [WebCoin - Cryptocurrency Price Tracker](https://webcoin.organizedchaos.me)
 ___
 
 #### Course Resources:
