@@ -1,0 +1,784 @@
+----------------------------------------------------------------------------------
+								08-Feb-2018
+----------------------------------------------------------------------------------
+:observer.start => introspect studio
+
+IO.inspect => use it for debugging
+
+GenServer: provides an implementation for all the state class and everything
+
+GenServer.strt_link(_ODULE_,%{})
+
+Init() is ppart of the interface
+
+{:noreply,state}	// to get no reply from the user
+
+handle_cast - when we reiceve a message
+handle_Call - when we need to return a message
+
+{:reply} -> to send a reply back
+
+bank = BankGens.start
+{:ok,pid} = BankGens//if pattern match fails => it's not okay
+
+Genserver.cast(pid, {:deposit,"alice",100})
+Genserver.call(pid, {:check, "alice"})
+:observer.start
+Genserver.cast(pid, {:deposit,"bob", 200})
+GenServer.cast(pid, {:transfer,"bob","alice",50})
+
+GenServer.cast(BankGens, {:transfer,"bob","alice",50})
+
+----------------------------------------------------------
+
+Plan A:
+Stick game in cannel state,
++ will last as long as the channel
+- lose data on connection disconnect
+- no way to communicate between different channels
+
+
+Plan B:
+GenServer with put and get
++ No data loss in disconnect
+- Race condition: if two channels are connected and update at the same time, the first will lose the data
+- resource leak: games will never clean up, till it is reset (need garbage collection for unused)
+- scaling: coz it will have to handle all the get and put of every request (a single process)
+
+Plan C:
+Usee Agent with global map
++ no race conidition => game updates in Agent process
+- crash will lose all the games
+- really slow
+
+
+
+Plan D:
+One Agent per Game
+- track the Agent processes
+
+Plan E:
+Agent, one map, "backups"
+primary state in channel
++ no data loss
+- race condition
+- slow | sequential write
++ never lose data
+
+
+---------------------------------------------------------------------------------
+13-Feb-2018
+
+Microblog App:
+- Like Twitter ot maybe Facebook
+
+Users can:
+-Register accounts
+- Make posts
+-Follow other users
+- Look at their feed, where they see the posts made by users that they follow
+
+
+Kind of data to store:
+-Users
+	-email: string
+	-name: string
+-posts
+	-body: string, possibly really long
+	//-title: nopes
+	-user_id: refernce to user
+
+We will store data in a Relational Databse | PostgreSQL
+
+microblog application without --noecto
+
+sudo su - postgres
+
+-d: create databases
+-P: password authentication
+
+createuser -d -P microblog
+
+
+vim config.dev.exs
+- edit the username and password, database {microblog_dev to sepreate it from the Production server DB}
+
+mix ecto.create [to create the DB]
+and start phx.server
+
+
+assets/css delete the css and install bootstrap 4 {in assets dir [npm install --save bootstrap popper.js jquey] [npm install -ssave-dev sassbrunch]}
+
+vim microblog/lib/microblog_web/layut/app.html.eex
+
+change css to sccs for bootstrap (app.css)
+vim brunch-config.js (to delelte the error of no css) in plugins
+
+sass:{
+	options: {
+	includepaths: ["node_moudles/boootstrap/scss"],
+	precision: 8,
+	}
+}
+
+npm:
+{
+	$jQuery;
+}
+
+
+we will create a new resource:
+export PS1 = "$ "
+mix phx.gen.html Accounts User users email:string name:string		
+	[	Accounts: Context Module | cannnot be as same as microblog] [the datatypes are for ecto library not for Elixir or postgres]
+	[User: strucutre, users: database name]
+	{we can use schema to just create an empty wireframe}
+
+ec lib/micriblog_web/router.ex we will ad resources "/users", UserController
+mix phx.routes
+
+
+Data operations for a CRUD application:
+	- create records
+	- retrieve
+	- update
+	- delete
+
+RESTful Routes:
+ - GET 		index: list all users
+ - GET 		new: for m to creat users
+ - POST 	create
+ - GET 		show
+ - GET 		edit
+ - POST 	update 		(PATCH)
+ - POST 	delete
+
+user_controller.ex: to handle resource edits
+show: to edit 1 user
+form: to edit the user(s)
+edit:
+
+we get two implcit columsn: id auto-incrementiing nteger
+
+in timestamps()
+#inserterd_at
+# updated_at
+
+:null false
+
+mix ecto.migrate [now the user knows about the users]
+
+localhost:4000/users
+
+create a new tbale for posts
+references: use ot to rerence th euserid to the auto id generated
+check the migration file after it is generated, [null: false]
+on_delete: :delete_all [so when a user is delted all hi/her posts are deleted]
+
+---------------------------------------------------------------------------------
+15-Feb 2018 Thursday
+
+Generic Strucutre
+
+form_for
+
+User Accounts:
+	- Register	(Free)
+	- Login/Logout
+
+user session resources:
+	- create a session (log in)
+	- delete (logout)
+
+===============================================
+/lib/microblog_web.router
+
+post "/session", SessionController, :create
+delete "/session", SessionCOntroller, :delete
+===============================================
+
+/lib/microblog_web/controller/session/postcontroller.ex
+
+defmodule MicroBlogWeb.SesisonCOntroller do
+	use MicroBog, :controller
+
+	alias Micrbolg.Accounts
+	alias Micrbolg.Accounts.User
+
+	def create (cons, %{"email" => email}) do
+	user = Accounts.get_user_by_email(email)
+	
+	if user do
+		conn
+		|> put_session(:user_id, user_id)
+		|> put_flash(:info, "Welcome back, #{user_name}")
+		|> redirect(to: page_path(conn, :index))
+	else
+		conn
+		|> put_flash(:error, "Can't log in")
+		|> redirect(to: page_path(conn, :index))
+	end
+	end
+
+	def delete(control, _params) do
+		conn
+		|> delete_session(:user_id)
+		|> put_flash(:info, "Logged Out")
+		|> redirect(to: page_path(conn, :index))
+	end
+===============================================
+
+Microblog/Acoounts/accounts.ex
+
+def get_usr_by_email(email) do
+	# look at doc for Ecto.Repo
+	Repo.get_by(User, email: email)
+end
+===============================================
+
+A form to allow user to login
+
+web/templates/index.html.eex
+
+<% form_tag("/session", method :post) do %>
+<div class="form-group">
+	Email
+	<input type="email" name = "email" palceholder="user@example.com">
+</div>
+
+< div class= "form-group">
+	<bitton class="btn-btn-priamry" Log In </button>
+	<% link "Rgister", to: user_path(@conn, :new)) %>
+<% end %>
+===============================================
+web/template/layout/
+
+top | login and log out button
+
+
+
+===============================================
+
+add feed to controller
+
+get "/feed" PageController :feed
+
+Go to page_controller.ex
+
+def feed(connnm _params) do
+	posts = Microblog.Social.list_posts()
+end
+
+===============================================
+templtes/feed.index.html
+
+
+
+
+
+
+
+l
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+20 Feb 2018
+-------------------------------------------------------------------------------------------------
+
+
+Goal: Simple persisitent data storage
+
+Berkley DB, LMDB
+
+Network file systems disadvantages
+> Sharding eg "Keys starting with A go to server #1;"
+
+
+== No SQL ==
+
+> Memcahed
+
+> Redis
+A reallly fast in memory key vlaues stre yser for all kind of thn=ings. Cna also save data to disk'
+
+	- Mpas string keys to structured values
+	(eg list, quweue, hash maps)
+	- Operations that make sense fot the data types are really fast.
+
+> Riak KV
+KV store, mapping string keys to blob values.
+	- replication: Akk writes are duplicated to several nodes, all must confirm for write to complete.
+	- sharding is supported (by key)
+	- data is eventually synced to disk
+	- reads are pretty quick - can read form any replica
+	- Problems: 
+		* Network partitition
+		* CAP Failure: Availability in case of partition
+
+Problem: THe CAP Theorem
+	- COnsistency All reads complete in finitre time adn returm the latest values
+	- Availability: ALll writes complete in finite time.
+	- Partition Tollerenc: NIdes in cluster cna be net-split into two partitions without losing other propertires
+
+> Couch DB
+	- JSON document store (String keys -> JSON vlaues)
+	- NO transaction guarantees
+	- Eventual consistency by versioning
+	- Map reduce indexes.
+	- Users: NPM index uses this
+
+	Fancy feature: Offline support
+		* Limited couchdb onod eon client (eg a phone)
+		* Limited node on a browser: PouchDB
+
+> MonogDB
+	- JSON document store
+	- Sharding
+	- Replicas (default behaviour: majority for reads and writes) | configurable
+	- OPtional schemas, limited join queries
+	- Indexes based on schemas
+
+	Bad reputation:
+		* "Web Scale", which means "loses data"
+		* Broken data model: Can get multiple versions of th esame document on some queries. | Isolatio failure
+	Users: eBay (media metadata)
+
+> Cassandra
+	- A table based column store
+		Query language is almost SQL
+		Deosn't have ACID transactions
+		Durability is guarantedd
+		Replicas (default: majority for reads and writes)
+		Users: Netflix
+
+--------------------------------------------------------------------------------------------------------------
+22 Feb
+---------------------------------------------------------------------------------------------
+
+Add a Navbar
+
+In the layout:
+
+  <!-- TODO: style with bootstrap -->
+  <div class="row">
+    <%= if @current_user do %>
+      <div class="col-9">
+        <p class="p-4">
+          <a href="/feed">Feed</a> |
+          <a href="/users">All Users</a>
+        </p>
+      </div>
+      <div class="col-3">
+        <p class="p-4">
+          Logged in as: <%= @current_user.name %> |
+          <%= link "Log Out", to: "/session", method: :delete %>
+        </p>
+      </div>
+    <% else %>
+      <div class="col-3 offset-9">
+        <p>Not logged in.</p>
+      </div>
+    <% end %>
+  </div>
+
+
+Create Follows resource
+$ mix phx.gen.json Social Follow follows follower_id:references:users followee_id:references:users
+
+router.ex
+Add this to our API scope:
+
+  scope "/api/v1", MicroblogWeb do
+    pipe_through :api
+    resources "/follows", FollowController, except: [:new, :edit]
+  end
+
+----------------------------------------------------------------------------------------------
+API path should be versioned
+
+----------------------------------------------------------------------------------------------
+Edit migration:
+
+on_delete: :delete_all), null: false
+Migrate.
+
+Edit follow schema:
+
+  alias Microblog.Accounts.User
+
+  schema "follows" do
+    belongs_to :follower, User
+    belongs_to :followee, User
+  
+  # ...
+    
+  def changeset(%Follow{} = follow, attrs) do
+    follow
+    |> cast(attrs, [:follower_id, :followee_id])
+    |> validate_required([:follower_id, :followee_id])
+  end
+Edit User Schema:
+
+  alias Microblog.Social.Follow
+
+  schema "users" do
+    field :email, :string
+    field :name, :string
+    has_many :follower_follows, Follow, foreign_key: :follower_id
+    has_many :followee_follows, Follow, foreign_key: :followee_id
+    has_many :followers, through: [:followee_follows, :follower]
+    has_many :followees, through: [:follower_follows, :followee]
+
+    # ...
+Add A Follows UI
+In the users controller:
+
+  def index(conn, _params) do
+    current_user = conn.assigns[:current_user]
+    users = Accounts.list_users()
+    follows = Microblog.Social.follows_map_for(current_user.id)
+    render(conn, "index.html", users: users, follows: follows)
+  end
+In the social context module:
+
+  def follows_map_for(user_id) do
+    Repo.all(from f in Follow,
+      where: f.follower_id == ^user_id)
+    |> Enum.map(&({&1.followee_id, &1.id}))
+    |> Enum.into(%{})
+  end
+In the user/show template:
+
+<script>
+ window.follow_path = "<%= follow_path(@conn, :index) %>";
+ window.current_user_id = "<%= @current_user.id %>";
+</script>
+
+...
+
+    <!-- add header column -->
+    <!-- body column: -->
+    <td>
+      <button class="follow-button btn btn-default"
+              data-user-id="<%= user.id %>"
+              data-follow="<%= @follows[user.id] %>">
+        Follow
+      </button>
+    </td>
+Write some javascript in app.js:
+
+import $ from "jquery";
+
+// ...
+
+function update_buttons() {
+  $('.follow-button').each( (_, bb) => {
+    let user_id = $(bb).data('user-id');
+    let follow = $(bb).data('follow');
+    if (follow != "") {
+      $(bb).text("Unfollow");
+    }
+    else {
+      $(bb).text("Follow");
+    }
+  });
+}
+
+function set_button(user_id, value) {
+  $('.follow-button').each( (_, bb) => {
+    if (user_id == $(bb).data('user-id')) {
+      $(bb).data('follow', value);
+    }
+  });
+  update_buttons();
+}
+
+function follow(user_id) {
+  let text = JSON.stringify({
+    follow: {
+        follower_id: current_user_id,
+        followee_id: user_id
+      },
+  });
+
+  $.ajax(follow_path, {
+    method: "post",
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8",
+    data: text,
+    success: (resp) => { set_button(user_id, resp.data.id); },
+  });
+}
+
+function unfollow(user_id, follow_id) {
+  $.ajax(follow_path + "/" + follow_id, {
+    method: "delete",
+    dataType: "json",
+    contentType: "application/json; charset=UTF-8",
+    data: "",
+    success: () => { set_button(user_id, ""); },
+  });
+}
+
+function follow_click(ev) {
+  let btn = $(ev.target);
+  let follow_id = btn.data('follow');
+  let user_id = btn.data('user-id');
+
+  if (follow_id != "") {
+    unfollow(user_id, follow_id);
+  }
+  else {
+    follow(user_id);
+  }
+}
+
+function init_follow() {
+  if (!$('.follow-button')) {
+    return;
+  }
+
+  $(".follow-button").click(follow_click);
+
+  update_buttons();
+}
+
+$(init_follow);
+Finally, fix the feed to only show post from followed users.
+
+posts/controller:
+
+  posts = Enum.reverse(Microblog.Social.feed_posts_for(conn.assigns[:current_user]))
+social context:
+
+  def feed_posts_for(user) do
+    user = Repo.preload(user, :followees)
+    followed_ids = Enum.map(user.followees, &(&1.id))
+
+    Repo.all(Post)
+    |> Enum.filter(&(Enum.member?(followed_ids, &1.user_id)))
+    |> Repo.preload(:user)
+  end
+That function could be optimized into a join in the DB - loading all posts every time would be terrible on Twitter - but it’s OK for this demo.
+
+
+
+
+
+*******************************************************************
+					23 Feb 2018
+*******************************************************************
+
+Microblog New Feature:
+	- Each user can pick who they follow.
+	- The feed page should only show posts from people you're following.
+	- Specifically. follow buttons show up on users and user AJAX requests as their implementation method.
+
+Relationships:
+	- A user folows many users.
+	- A user is followed by many users.
+
+Two complications:
+	- Relationshio is many-to-many
+	- Relationship is to teh same resource
+
+For many to many relationship, we need a "join table"
+
+Add new resource: folows
+
+Follows:
+	- user_id: Who's the fillower   (follower_id)
+	- user_id: Who's being followed (followee_id)
+	But we cannot have two user_id in the same table
+
+-----------------------------------------------------------------------------------------------------------
+lib/microblob_we/templates\layout\app.html.eex
+(TO add the navigation bar)
+
+// When the user is logged in
+<div class="col-9">
+	<p class="p-4">					//Adds padding so that the text is not stuck tat the top
+		<a href="/feed">Feed</a>
+		<a href="/users">Users</a>
+	</p>
+</div>
+
+------------------------------------------------------------------------------------------------------------
+ mix phx.gen.json Social Follow follows follower_id:refrences:user followee_id:refrences:user
+ struct: Follow
+ table_name: follows
+
+ 	* insert in router to API scope(uncomment the api code), and migrate [scope "api/v1" - versioning the api]
+ 	- before we willad constraints
+ 		Micriblog.Repo.Migrations.CreateFollows
+
+ 		follower_id: delete_all), null: false
+ 		followee_id: delete_all), null: false
+
+ 		// Add a unique index in [:follower_id, :followee_id] to prevent dups.
+
+ 		Since the scope is in API we will not have access to @conn or @current_user plug as they are in browser scope
+
+localhost:4000/api/v1/follows
+------------------------------------------------------------------------------------------------------------
+lib.microblof/social/follow/
+	
+	alias Micrblog.Accounts.User
+
+	schema "follows"
+		belongs_to: follower, User
+		belongs_to: followee, User
+
+		deelte the fields
+
+
+		def changeset()
+		|> cast([:follower_id, :followee_id])
+		|> validate_required([:follower_id, :followee_id])
+
+	
+	in schema "users":
+		# Goal: |> preload(:followers) <- list of followers
+		has_many :follower_follows, Follow, forgein_key: follower_id
+		has_many :followers, through: [:followee_follows, :follower]
+		
+
+		has_many :followee_follows, Follow, forgein_key: followere_id
+		# To get put followers, get the list of follows where we are
+		# the followee. For each of those, our follower is the the follower/
+
+		has_many :followees, through: [:follower_follows, :followee]
+------------------------------------------------------------------------------------------------------------
+
+controller/user_controller.ex
+	
+	-***missing***
+------------------------------------------------------------------------------------------------------------
+
+index.html.eex
+<button> Follow </button>
+
+<script>
+	window.follow_path = "<% = follow_path(@caonn, :index) %>";
+
+	# to get who is following whom  | security issue
+	window.current_user_id = <%= %current_user.id %>;
+
+	<button class=""
+			data-user-id=
+			data-
+</script>
+
+
+
+----------------------------------------------
+16 - March-2018 | Security
+----------------------------------------------
+
+
+----------------------------------------------
+27 - March-2018 | Single Page Web Application
+----------------------------------------------
+
+
+- A website wiht only on page.
+- JavaScript
+- All client <-> server communciation after first page is asynchronous
+
+Why?
+  - Able to maintian JS aplliction state between multiple "pages".
+  - We can control the visual apperarenc page loads.
+  - Subsequent page loads cna be much faster, exp if we're clever about queries and caching.
+
+Why not?
+- Mkaes things more complicated: Not the "normal" method that the web has used for 20 years.
+  - server side frameworks do a bunch for you
+  - some heavyweight client side frameworks exist, but to some extent the point of an SPA is control.
+- More processing on client
+  - requires JavaScript
+- Doing is yourself may mean you forget error handling.
+- Easy to mess up core browser UI: Break the back button.
+- Slower on first page load.
+
+
+mix.gen.json Accounts Users users user_id:string email:string
+mix.gen.json Posts Post posts user_id: refrences: users
+
+---------------------------------------------------------------------
+priv/repo/seeds.ex
+To insert production data/dev data
+
+defmodule Seeds do
+  alias Microblog. repo
+  alias Microblog.Users.User
+  alias Microblog.Posts.Post
+
+  def run do
+    Repo.delete_all(User)
+    a = Repo.insert!(%User{name:"alice"})
+    a = Repo.insert!(%User{name:"alice"})
+    a = Repo.insert!(%User{name:"alice"})
+    a = Repo.insert!(%User{name:"alice"})
+
+
+    Repo.delete_all(Post)
+    Repo.insert!(%Post{user_id: a.id, posts: "Hello"})
+  end
+end
+
+Seeds.run
+---------------------------------------------------------------------
+
+localhost:4000/api/v1/users
+localhost:4000/api/v1/posts
+
+
+lib/microblog_web/template/layout.eex.html
+
+<main></main> --
+
+index.html.eex
+<div id="root">
+</div>
+
+npm install react-router-dom
+
+mkdir components
+
+impoort microblog_inti from "./componens/microblog";
+$(mircblog_init);
+
+
+---------------------------------------------------------------------
+microblog.jsx
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+
+-------------------------------------------------------------------
+
+April 13 | Friday
+
+<script defer></script>
+
+telnet localhost 8000
+cyptocompare
+
+Css build on SASS (SCSS)
+Server side template (EEX)
+compiler = babel
+build tool: brunch
